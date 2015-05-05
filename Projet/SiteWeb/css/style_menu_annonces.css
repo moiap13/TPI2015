@@ -1,0 +1,333 @@
+/* 
+    Document   : style
+    Created on : 4 mars 2014, 08:51:03
+    Author     : antonio
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+body
+{
+    width: 100%;
+    height: 100%;
+}
+.a_droite
+{
+    float: right;
+}
+
+a:link
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: black;
+}
+a:visited
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: black;
+}
+a:hover
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: lime;
+}
+a:active
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: fuchsia;
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+#principal
+{
+    width: 1200px;
+    height: 680px;
+    margin: auto;
+    /*border-radius: 25px; 
+    box-shadow: 15px 15px 200px black;*/
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+#banniere
+{
+    width: 1200px;
+    height: 100px;
+}
+.div_banniere
+{
+    width: 240px;
+    height: 100px;
+    float : left;
+    font-size: 11pt;
+    text-align: center;
+}
+#titre_site
+{
+    font-size: 20pt;
+}
+#display_user
+{
+    font-size: 11pt;
+    color: red;
+}
+.div_banniere a:link
+{
+    text-decoration: none;
+    color: black;
+}
+.div_banniere a:visited
+{
+    text-decoration: none;
+    color: black;
+}
+.div_banniere a:hover
+{
+    text-decoration: none;
+    color: lime;
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+.contour
+{
+    width: 95%;
+    height: 80%;
+    margin: auto;
+    overflow: auto;
+}
+.titre
+{
+    width: 90%;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 20pt;
+    text-align: center;
+}
+.disabled
+{
+    color: grey;
+}
+
+.warning_message
+{
+    text-align: center;
+    color: red;
+    margin-top: 100px;  
+}
+#contenent
+{
+    width: 1197px;
+    height: 680px;
+    margin-top: 25px;
+    float: left;
+    //background-color: yellow;
+    /*border-radius: 25px; 
+    box-shadow: 15px 15px 20px black;*/
+    border : solid 1px black;
+    border-radius: 25px 25px 0px 0px;
+    font-size: 14pt;
+}
+#contenent img
+{
+    border-radius: 100px;
+}
+#favoris
+{
+    width: 28%;
+    height: 680px;
+    float: left;
+}
+.favoris_table
+{
+    width: 100%;
+    height: 100px;
+    border-bottom: 2px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.photo_favoris
+{
+    width: 100px;
+    height: 100px;
+    float: left;
+    //background-color: purple;
+}
+.titre_favoris
+{
+    width: 63%;
+    height: 35%;
+    float: left;
+    text-align: center;
+    border-bottom: 1px solid black;
+    //background-color: orange;
+}
+.text_favoris
+{
+    width: 63%;
+    height: 64%;
+    float: left;
+    text-align: center;
+    overflow: auto;
+    //background-color: lime;
+}
+#formulaire
+{
+    //background-color: blue;
+    width: 100%;
+    height: 590px;
+}
+#inserer_annonce
+{
+    width: 44%;
+    height: 680px;
+    float: left;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.ligne_petite
+{
+    width: 100%;
+    height: 60px;
+    margin: auto;
+    //background-color: yellow;
+}
+#ligne_grande
+{
+    width: 100%;
+    height: 250px;
+    margin: auto;
+    //background-color: purple;
+}
+.colonne_gauche
+{
+    width: 40%;
+    float: left;
+    text-align: center;
+    //background-color: red;
+}
+.colonne_droite
+{
+    width: 60%;
+    float: right;
+    text-align: center;
+    padding-top: 15px;
+}
+.grande_taille
+{
+    width: 80%;
+    font-size: 12pt;
+}
+#btn_envoyer
+{
+    float: right;
+    width: 200px;
+    font-size: 12pt;
+}
+#user_annonces
+{
+    width: 27.8%;
+    height: 680px;
+    float: left;
+}
+.user_annonces_table
+{
+    width: 100%;
+    height: 100px;
+    border-bottom: 2px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    //background-color: aqua;
+}
+.photo_user_annonce
+{
+    width: 32%;
+    height: 100px;
+    float: left;
+    //background-color: purple;
+}
+.titre_user_annonce
+{
+    width: 63%;
+    height: 35%;
+    float: left;
+    text-align: center;
+    border-bottom: solid 1px black;
+    //background-color: orange;
+}
+.date_user_annonces
+{
+    width: 63%;
+    height: 32%;
+    float: left;
+    text-align: center;
+    //border-bottom: solid 1px black;
+    //background-color: lime;
+}
+.menu_rapide
+{
+    width: 5%;
+    height: 100px;
+    float: right;
+    //background-color: purple;
+}
+.menu_rapide div
+{
+    width: 100%;
+    height: 50%;
+    //background-color: red;
+}
+
+.menu_rapide div a:link
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: lightgrey;
+}
+.menu_rapide div a:visited
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: lightgrey;
+}
+.menu_rapide div a:hover
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: black;
+}
+.menu_rapide div a:active
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: fuchsia;
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+#pied_page
+{
+    width: 1197px;
+    height: 50px;
+    float: left;
+    margin-bottom: 25px;
+    border : 1px solid black;
+    border-top: none;
+    border-radius: 0px 0px 25px 25px;
+}
+#pied_page div
+{
+    width: 400px;
+    height: 50px;
+    float: left;
+    text-align: center;
+}

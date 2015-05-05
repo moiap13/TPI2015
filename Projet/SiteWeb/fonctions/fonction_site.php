@@ -47,9 +47,9 @@ function couper_avec_separateur($chaine, $separateur)
     
     $i_index = 0;
     
-    if($chaine != "" && chainelen($chaine) > 0) // test si la chaine est plus grande que 0 et si elle n'est pas vide
+    if($chaine != "" && strlen($chaine) > 0) // test si la chaine est plus grande que 0 et si elle n'est pas vide
     {
-        for($i=0;$i< chainelen($chaine) ;$i++) // on boucle sur chaques carachtere de la chaine
+        for($i=0;$i< strlen($chaine) ;$i++) // on boucle sur chaques carachtere de la chaine
         {
             if($chaine[$i] != $separateur) // si le carachtere lu est différent du separateur
             {
@@ -138,7 +138,7 @@ function savoir_les_jours_entre_2_dates($date_user)
     $date = date('Y-m-d', $date);
 
     $date = new DateTime($date);
-    $aujourdhui = new DateTime(create_date_today());
+    $aujourdhui = new DateTime(date_ajourdhui());
 
     $date = $aujourdhui->diff($date,1);
     return $date->format('%a jours');
@@ -286,12 +286,33 @@ function mettre_fichier_dossier_dans_tableau($dossier_parametre)
  * @param type $dossier : dossier a verifier
  * @return boolean :  retourne true si le dossier existe false si non
  */
-function dossier_exist($dossier)
+function dossier_existe($dossier)
 {
     $result = false;
     
     if(file_exists($dossier) && is_dir($dossier))
         $result = true;
+    
+    return $result;
+}
+
+function supprimer_photo_avatar($nom_photo)
+{
+    if(file_exists($nom_photo))
+    {
+        unlink($nom_photo);
+    }
+}
+
+function efface_dossier($dossier)
+{
+    $result = false;
+    
+    if(dossier_existe($dossier))
+    {
+        rmdir($dossier);
+        $result = true;
+    }
     
     return $result;
 }
@@ -412,24 +433,42 @@ function afficher_erreur($erreur)
         case 11:
             $result = "Inscription échouée";
             break;
+        case 12:
+            $result = "Impossible de supprimer le dossier";
+            break;    
     }
     
     return $affichage = '<script type="text/javascript">alert("' . $result . '");</script>';
 }
 
-function creer_menu_admin()
+function creer_menu_admin($chemin)
 {
     $affichage = "";
     
     $affichage .= '<ul id="menu-deroulant">';
-	$affichage .= '<li><img src="img/image_site/bouton_menu.png" width="10" height="10"/> Gestion du site ';
+	$affichage .= '<li><img src="'.$chemin.'img/image_site/bouton_menu.png" width="10" height="10"/> Gestion du site ';
 		$affichage .= '<ul>';
-			$affichage .= '<li><a href="#">Gestion utilisateurs</a></li>';
-			$affichage .= '<li><a href="#">Gestion annonces</a></li>';
-			$affichage .= '<li><a href="#">Gestion catégories</a></li>';
+			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_utilisateurs.php">Gestion utilisateurs</a></li>';
+			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_annoncess.php">Gestion annonces</a></li>';
+			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_catégories.php">Gestion catégories</a></li>';
 		$affichage .= '</ul>';
 	$affichage .= '</li>';
     $affichage .= '</ul>';
     
     return $affichage;
+}
+function verifie_categorie($name, $bdd)
+{
+    $array = recupere_categories($bdd);
+    $return = true;
+    
+    for($i=0;$i<count($array);$i++)
+    {
+        if($array[$i][1] == $name)
+        {
+            $return = false;
+        }
+    }
+    
+    return $return;
 }

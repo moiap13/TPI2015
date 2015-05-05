@@ -15,6 +15,8 @@ $prenom = (isset($_REQUEST['tbxprenom'])?$_REQUEST['tbxprenom']:"");
 $pseudo = (isset($_REQUEST['tbxpseudo'])?$_REQUEST['tbxpseudo']:"");
 $email = (isset($_REQUEST['tbxemail'])?$_REQUEST['tbxemail']:"");
 
+
+
 if(isset($_REQUEST['erreur']))
 {
     echo afficher_erreur($_REQUEST['erreur']);
@@ -22,8 +24,9 @@ if(isset($_REQUEST['erreur']))
 
 if(isset($_REQUEST["btninscr"]) == true) 
 {
+    
     if(filter_input(INPUT_POST, "tbxemail", FILTER_VALIDATE_EMAIL))
-    {
+    {var_dump_pre($pseudo);
         $sql = 'select idUtilisateur from utilisateur where Email = :mail';
         $requete = $bdd->prepare($sql);
         $requete->execute(array(':mail' => $_REQUEST['tbxemail']));

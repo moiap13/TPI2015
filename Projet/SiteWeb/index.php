@@ -31,15 +31,19 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
     $pseudo = 'Bienvenue ' . $_SESSION['PSEUDO'];
 
     $lien_menu_annonces =  '<p><a href="pages/annonces/menu_annonces.php">Menu annonces</a></p>';
-    $lien_gestion_compte = '<p><a href="pages/utilisateur/gestion_compte.php">Gérer son compte</a></p>';
+    $lien_gestion_compte = '<p><a href="pages/gestion/gestion_compte.php">Gérer son compte</a></p>';
     
     if($_SESSION['ADMIN'] == 1)
     {
         //$pseudo = '<p><a href="pages/utilisateur/gestion_site.php">Gérer le site</a></p>';
-        $pseudo = creer_menu_admin();
+        $pseudo = creer_menu_admin('./');
     }
 }
 
+if(isset($_REQUEST['erreur']))
+{
+    echo afficher_erreur($_REQUEST['erreur']);
+}
 ?>
 <!--
 To change this template, choose Tools | Templates
@@ -59,9 +63,6 @@ and open the template in the editor.
         <script src="javascript/fonction_globales.js"></script>
     </head>
     <body>
-        <?php
-            // insère ton gros code ici Antonio ;P
-        ?>
         <div id="principal">
             <div id="banniere">
                 <div class="div_banniere"><p id="display_user"><?php echo $pseudo; ?></p></div>

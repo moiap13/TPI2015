@@ -23,7 +23,49 @@ function connexion($db_name, $host, $user, $pwd)
 
 function recupere_users_par_id($id, $bdd)
 {
-    $sql = 'SELECT Prenom, Nom, Statut FROM utilisateur WHERE IdUtilisateur=' . $id;
-    $requete = $bdd->query($sql);
-    return $requete->fetchAll();
+    $sql = 'SELECT Prenom, Nom, Statut FROM utilisateur WHERE IdUtilisateur=:id';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+    
+    if(!empty($requete))
+        $requete->fetchAll();
+    
+    return $requete;
+}
+
+function modification_avatar($id, $avatar, $bdd)
+{
+    $sql = 'UPDATE utilisateur SET avatar=:avatar WHERE idUtilisateur=:id';
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('avatar' => $avatar, 'id' => $id));
+}
+
+function inserer_categorie($nom_categorie, $bdd)
+{
+    $sql = 'insert into categories(categorie) values(:categorie)';
+    $request = $bdd->prepare($sql);
+    $request->execute(array('categorie' => $nom_categorie));
+    
+     return $bdd->lastInsertId();
+}
+
+function ajout_annonce($titre, $texte, $date,$prix,$id_user,$id_categorie, $photos, $bdd)
+{
+    $titre = strtolower($titre);
+    $texte = strtolower($texte);
+    
+    $sql = 'insert into annonces(titre, description, date_debut, prix, idUtilisateur, idCategorie, active, photo) values(:titre,:texte,:date,:prix,:id,:categorie,"0",:photo)';
+    
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array(
+        'titre' => $titre,
+        'texte' => $texte,
+        'date' => $date,
+        'prix' => $prix,
+        'id' => $id_user,
+        'categorie' => $id_categorie,
+        'photo' => $photos
+    ));
+    
+    return $bdd->lastInsertId();
 }

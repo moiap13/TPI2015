@@ -1,0 +1,213 @@
+/* 
+    Document   : style
+    Created on : 4 mars 2014, 08:51:03
+    Author     : antonio
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+body
+{
+    width: 100%;
+    height: 100%;
+}
+
+a:link
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: black;
+}
+a:visited
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: black;
+}
+a:hover
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: lime;
+}
+a:active
+{
+    margin-top: 0px; 
+    text-decoration: none;
+    color: fuchsia;
+}
+.retour_ligne
+{
+    margin-top: 30px;
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+#principal
+{
+    width: 88%;
+    height: 860px;
+    margin: auto;
+    //background-color: red;
+    //border-radius: 25px;
+    //box-shadow: 15px 15px 200px black;
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+#banniere
+{
+    width: 100%;
+    height: 100px;
+}
+.div_banniere
+{
+    width: 20%;
+    height: 100px;
+    float : left;
+    font-size: 11pt;
+    text-align: center;
+}
+#titre_site
+{
+    font-size: 20pt;
+}
+#display_user
+{
+    font-size: 11pt;
+    color: red;
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+.disabled
+{
+    color: grey;
+    margin-top: 0px;
+    font-size: 11pt;
+}
+.warning_message
+{
+    text-align: center;
+    color: red;
+    //margin-top: 100px;  
+}
+#contenent
+{
+    width: 100%;
+    height: 680px;
+    margin-top: 25px;
+    float: left;
+    border: 1px solid black;
+    border-radius: 25px 25px 0px 0px;
+}
+#contenent img
+{
+    border-radius: 100px;
+}
+#bienvenue
+{
+    width: 90%;
+    height: 100px;
+    margin: auto;
+}
+#bienvenue span
+{
+    display: block;
+    padding-top: 30px;
+    font-size: 26pt;
+}
+#gestion_compte
+{
+    width: 90%;
+    height: 580px;
+    margin: auto;
+}
+#form_avatar
+{
+    width: 40%;
+    height: 540px;
+    float: left;
+    border-right: 1px solid black;
+}
+#form_avatar img
+{
+    width: 95%;
+    height: 95%;
+    border-radius: 240px;
+}
+#form_infos
+{
+    width: 59%;
+    height: 540px;
+    float: left;
+}
+#table_form
+{
+    width: 90%;
+    margin: auto;
+    margin-top: 20%;
+}
+#titre_table
+{
+    width: 100%;
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+    padding-bottom: 50px;
+}
+.ligne
+{
+    width: 100%;
+    text-align: center;
+    float: left;
+}
+.cellule
+{
+    width: 45%;
+    text-align: center;
+    float: left;
+}
+.deux_points
+{
+    width: 10%;
+    text-align: center;
+    float: left;
+}
+.cellule input
+{
+    width: 100%;
+}
+#avatar
+{
+    width: 100%;
+    height: 80%;
+}
+#input_avatar
+{
+    width: 100%;
+    height: 19%; 
+}
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+#pied_page
+{
+    width: 100%;
+    height: 50px;
+    float: left;
+    margin-bottom: 25px;
+    border : 1px solid black;
+    border-top: none;
+    border-radius: 0px 0px 25px 25px;
+}
+#pied_page div
+{
+    width: 33%;
+    height: 50px;
+    float: left;
+    text-align: center;
+}
