@@ -174,7 +174,7 @@ and open the template in the editor.
                 <div id="bienvenue">
                     <span>Bienvennue - <?php echo $_SESSION['PSEUDO']; ?></span>
                 </div>
-                <div id="gestion_compte">
+                <div id="gestion">
                     <fieldset>
                         <legend>Gestion du compte</legend>
                         <div>

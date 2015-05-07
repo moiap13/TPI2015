@@ -61,10 +61,11 @@ function afficher_photo_dernieres_annonces_postees($tableau)
 {  
     $affichage = '';
     $nb_annonces = 0;
+    $max_annonce = 4;
     
     if(!empty($tableau))
     {
-        for($i=0;$i<4;$i++)
+        for($i=0;$i<$max_annonce;$i++)
         {
             if(isset($tableau[$i]))
             {
@@ -88,6 +89,10 @@ function afficher_photo_dernieres_annonces_postees($tableau)
                     }
                     $nb_annonces++;
                 }
+                else
+                {
+                    $max_annonce++;
+                }
             }
         }
         
@@ -109,10 +114,11 @@ function afficher_dernieres_annonces_postees($tableau)
 {
     $affichage = '';
     $nb_annonces = 0;
+    $max_annonce = 4;
     
     if(!empty($tableau))
     {
-        for($i=0;$i<4;$i++)
+        for($i=0;$i<$max_annonce;$i++)
         {
             if(isset($tableau[$i]))
             {
@@ -125,6 +131,10 @@ function afficher_dernieres_annonces_postees($tableau)
                     $affichage .= '<a href="pages/annonces/afficher_annonce.php?id_annonce='. $tableau[$i][0] .'" >' . $tableau[$i][1] . ' - ' .  $tableau[$i][4] . '</a>';
                     $affichage .= '</div>';
                     $nb_annonces++;
+                }
+                else
+                {
+                    $max_annonce++;
                 }
             }
         }
@@ -180,9 +190,9 @@ function affichage_annonces_utilisateur($tableau)
                 $affichage .= '<a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'&droit=proprietaire" ><img src="../../img/image_site/No_Image_Available.png" width="100px" height="100px" /></a>';
             }
 
-             $affichage .= '</div>'.
+            $affichage .= '</div>'.
                      '<div class="menu_rapide">' .
-                      '<div><a href="confirmer_suppression.php?id='.$tableau[$i][0].'">x</a></div>' .
+                      '<div><a href="confirmer_suppression.php?id='.$tableau[$i][0].'&droit=proprietaire">x</a></div>' .
                         '<div><a href="modifier_annonce.php?id_annonce='. $tableau[$i][0] .'">✍</a></div>' .
                       '</div>' .
                         '<div class="titre_user_annonce"><a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'&droit=proprietaire" >'. $tableau[$i][1] .'</a></div>'.
@@ -339,5 +349,63 @@ function afficher_photo_miniature_modifier($tableau, $id_annonce)
                             '<input type="file" name="photos[]" multiple onchange="this.form.submit();"/><br/>' .
                         '</form>' .
                     '</div>';
+    return $affichage;
+}
+function afficher_annonces_gestion_annonce($tableau)
+{
+    $affichage = "";
+    $i_index = 0;
+    
+    $nb_annonces = count($tableau);
+    
+    $nb_ligne = $nb_annonces / 3;
+    
+    
+    
+    for($i=0;$i<$nb_ligne;$i++)
+    {
+        $affichage .= '<div class="ligne_gestion">';
+        
+        for($y=0;$y<3;$y++)
+        {
+            if(isset($tableau[$i_index]))
+            {
+                if($y==0)
+                    $affichage .= '<div class="gestion_annonces_table">';
+                else
+                    $affichage .= '<div class="gestion_annonces_table1">';
+
+                $affichage .= '<div class="photo_gestion_annonce">';
+
+                if($tableau[$i_index][3] == 1)
+                {
+                    $str = mettre_fichier_dossier_dans_tableau('../../img/annonces/' . $tableau[$i_index][0] . '/');
+                    $file_type = couper_avec_separateur($str[0] . '.', '.');
+
+                    $affichage .= '<a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" ><img src="'. '../../img/annonces/' . $tableau[$i_index][0] . '/0.' . $file_type[1] .'" width="100px" height="100px" /></a>';
+                }
+                else
+                {
+                    $affichage .= '<a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" ><img src="../../img/image_site/No_Image_Available.png" width="100px" height="100px" /></a>';
+                }
+                $affichage .= '</div>'.
+                
+                '<div class="titre_gestion_annonce"><a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" >'. $tableau[$i_index][1] .'</a></div>'.
+
+                '<div class="description_gestion_annonces">'. $tableau[$i_index][2] .'</div>' .
+                '<div class="form_gestion_annonces">'
+                        . '<form action="../annonces/confirmer_suppression.php?id='. $tableau[$i_index][0].'&droit=admin" method="post"><input type="submit" name="btn_supprimer" value="Suprimer" /></form>'
+                        . '<form action="gestion_annonces.php?id_annonce='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_activer" value="Rendre active" /></form>'
+                . '</div></div>';
+
+
+                $i_index++;
+            }
+            
+        }
+        
+        $affichage .= "</div>";
+    }
+    
     return $affichage;
 }

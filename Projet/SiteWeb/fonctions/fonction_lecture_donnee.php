@@ -84,3 +84,18 @@ function recupere_categories_par_id($id, $bdd)
     
     return $requete;
 }
+/*******************************************************************************************************************************/
+/********************************************* Page gestion ANNONCES ***********************************************************/
+/*******************************************************************************************************************************/
+function recupere_annonces_non_actives($bdd)
+{
+    $sql='select idAnnonce, titre, description, photo, prix from annonces where active =0';
+    
+    $requete = $bdd->prepare($sql);
+    $requete->execute();
+    
+    if(!empty($requete))
+        $requete = $requete->fetchAll();
+    
+    return $requete;
+}

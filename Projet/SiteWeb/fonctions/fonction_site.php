@@ -462,7 +462,7 @@ function creer_menu_admin($chemin)
 	$affichage .= '<li><img src="'.$chemin.'img/image_site/bouton_menu.png" width="10" height="10"/> Gestion du site ';
 		$affichage .= '<ul>';
 			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_utilisateurs.php">Gestion utilisateurs</a></li>';
-			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_annoncess.php">Gestion annonces</a></li>';
+			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_annonces.php">Gestion annonces</a></li>';
 			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_catégories.php">Gestion catégories</a></li>';
 		$affichage .= '</ul>';
 	$affichage .= '</li>';

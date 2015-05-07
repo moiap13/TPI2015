@@ -1,17 +1,13 @@
 <?php
 session_start();
 
-/****************************************************************
- * Author               : Antonio Pisanello                     * 
- * Class                : Ecole d'informatique Genève IN-P4A    *
- * Version              : 1.0                                   *
- * Date of modification : 25.09.14                              *
- * Modification         :                                       *
+/*****************************************************************
+ * Author               : Antonio Pisanello                      * 
+ * Class                : Ecole d'informatique Genève IN-P4A     *
+ * Version              : 1.0                                    *
+ * Date of modification : 25.09.14                               *
+ * Modification         :                                        *
  ****************************************************************/
-
-/*echo '<pre>';
-var_dump($_SESSION);
-echo '</pre>';*/
 
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';

@@ -98,3 +98,11 @@ function maj_photo($id, $valeur_photo, $bdd)
         'id' => $id
     ));
 }
+function maj_active($id, $valeur_active, $bdd)
+{
+    $modifie = $bdd->prepare('UPDATE annonces SET active=:active WHERE idAnnonce=:id');
+    $modifie->execute(array(
+        'active' => $valeur_active,
+        'id' => $id
+    ));
+}
