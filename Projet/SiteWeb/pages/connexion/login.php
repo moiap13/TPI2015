@@ -21,14 +21,17 @@ if((isset($_REQUEST["login"])))
     
     if(!empty($Login))
     {
-        $user = recupere_users_par_id($Login[0][0], $bdd);
+        $user = recupere_utilisateur_par_id($Login[0][0], $bdd);
 
         $_SESSION["ID"] = $Login[0][0];
-        $_SESSION["PSEUDO"] = $user[0][0];
-        $_SESSION["ADMIN"] = $user[0][2];
+        $_SESSION["PSEUDO"] = $user[0][1];
+        $_SESSION["ADMIN"] = $user[0][4];
         $_SESSION["CONN"] = true;
         
-        header("Location: ../../index.php");
+        if(isset($_REQUEST["page"]))
+            header("Location: " . $_REQUEST["page"] . ".php");
+        else
+            header("Location: ../../index.php");
     }
     else
     {

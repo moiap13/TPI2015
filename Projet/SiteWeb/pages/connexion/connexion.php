@@ -60,9 +60,6 @@ and open the template in the editor.
         <script src="../../javascript/fonction_globales.js"></script>
     </head>
     <body>
-        <?php
-            // insère ton gros code ici Antonio ;P
-        ?>
         <div id="principal">
             <div id="banniere">
                 <div class="div_banniere"><p id="display_user"></p></div>
@@ -76,7 +73,7 @@ and open the template in the editor.
                 </div>
             </div>
             <div id="div_log">
-                <form action="#" method="post">
+                <form action="connexion.php" method="post">
                     <div id="div_table">
                         <div class="ligne"><div id="titre_table">Login</div></div>
                         <div class="ligne"><div class="cellule">User ID / e-mail</div><div class="deux_points">:</div><div class="cellule"><input type="text" name="tbxusers" value="<?php echo "$users"; ?>" /></div></div>

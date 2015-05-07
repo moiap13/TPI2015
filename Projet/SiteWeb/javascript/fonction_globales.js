@@ -28,8 +28,8 @@ function submit()
 
 function test()
 {
-    var categorie = document.getElementById("cb_categorie");
-    var tbx = document.getElementById("tbx_autre");
+        var categorie = document.getElementById("cb_categorie");
+        var tbx = document.getElementById("tbx_autre");
 
     if(categorie.value == "new")
     {
@@ -40,5 +40,23 @@ function test()
     {
         tbx.type = "hidden";
         tbx.required = false;
+    }
+}
+
+function appercu_img(input) 
+{
+    var img = document.getElementById("img_avatar");
+    alert("hello");
+    if (input.files && input.files[0]) 
+    {
+        
+        var reader = new FileReader();
+
+        reader.onload = function (e) 
+        {
+            img.src = e.target.result;
+        }
+
+        reader.readAsDataURL(input.files[0]);
     }
 }

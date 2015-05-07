@@ -295,6 +295,13 @@ function dossier_existe($dossier)
     
     return $result;
 }
+function supprimer_photo($nom_photo, $id_annonce)
+{
+    if(file_exists('../../img/annonces/' . $id_annonce . '/' . $nom_photo))
+    {
+        unlink('../../img/annonces/' . $id_annonce . '/' . $nom_photo);
+    }
+}
 
 function supprimer_photo_avatar($nom_photo)
 {
@@ -435,7 +442,13 @@ function afficher_erreur($erreur)
             break;
         case 12:
             $result = "Impossible de supprimer le dossier";
-            break;    
+            break; 
+        case 13:
+            $result = "Aucune annonce a modifier";
+            break; 
+        case 14:
+            $result = "Annonce modifiée correctement";
+            break; 
     }
     
     return $affichage = '<script type="text/javascript">alert("' . $result . '");</script>';

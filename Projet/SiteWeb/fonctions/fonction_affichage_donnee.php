@@ -6,7 +6,7 @@
 
 /**
  * 
- * @param type $array
+ * @param type $tableau
  * @param type $mode
  * @return string
  */
@@ -68,20 +68,23 @@ function afficher_photo_dernieres_annonces_postees($tableau)
         {
             if(isset($tableau[$i]))
             {
-                if(get_days_remaning($tableau[$i][2])[1])
+                $jours = savoir_les_jours_restants($tableau[$i][2])[0];
+                $jours = $jours[0] . $jours[1];
+                
+                if(savoir_les_jours_restants($tableau[$i][2])[1] && $jours <= 15)
                 {
-                    if(dir_exist('img/annonces/' . $tableau[$i][0])  && $tableau[$i][3] == 1)
+                    if(dossier_existe('img/annonces/' . $tableau[$i][0])  && $tableau[$i][3] == 1)
                     {
-                        $str = put_dirfile_array('img/annonces/' . $tableau[$i][0] . '/');
+                        $str = mettre_fichier_dossier_dans_tableau('img/annonces/' . $tableau[$i][0] . '/');
 
-                        $file_type = split_separator($str[0] . '.', '.');
+                        $file_type = couper_avec_separateur($str[0] . '.', '.');
 
-                        $affichage .= '<div class="derniere_annonce"><a href="pages/annonces/view_annonce.php?id_annonce='. $tableau[$i][0] .'" ><img src="img/annonces/' . $tableau[$i][0] . '/0.' . $file_type[1] .'"/></a></div>';
+                        $affichage .= '<div class="derniere_annonce"><a href="pages/annonces/afficher_annonce.php?id_annonce='. $tableau[$i][0] .'" ><img src="img/annonces/' . $tableau[$i][0] . '/0.' . $file_type[1] .'"/></a></div>';
 
                     }
                     else
                     {
-                        $affichage .= '<div class="derniere_annonce"><a href="pages/annonces/view_annonce.php?id_annonce='. $tableau[$i][0] .'" ><img src="img/image_site/No_Image_Available.png" width="100px" height="100px" /></a></div>';
+                        $affichage .= '<div class="derniere_annonce"><a href="pages/annonces/afficher_annonce.php?id_annonce='. $tableau[$i][0] .'" ><img src="img/image_site/No_Image_Available.png" width="100px" height="100px" /></a></div>';
                     }
                     $nb_annonces++;
                 }
@@ -113,10 +116,13 @@ function afficher_dernieres_annonces_postees($tableau)
         {
             if(isset($tableau[$i]))
             {
-                if(get_days_remaning($tableau[$i][2])[1])
+                $jours = savoir_les_jours_restants($tableau[$i][2])[0];
+                $jours = $jours[0] . $jours[1];
+                
+                if(savoir_les_jours_restants($tableau[$i][2])[1] && $jours <= 15)
                 {
                     $affichage .= '<div class="titre_derniere_annonce">';
-                    $affichage .= '<a href="pages/annonces/view_annonce.php?id_annonce='. $tableau[$i][0] .'" >' . $tableau[$i][1] . '</a>';
+                    $affichage .= '<a href="pages/annonces/afficher_annonce.php?id_annonce='. $tableau[$i][0] .'" >' . $tableau[$i][1] . ' - ' .  $tableau[$i][4] . '</a>';
                     $affichage .= '</div>';
                     $nb_annonces++;
                 }
@@ -133,7 +139,7 @@ function afficher_combobox_categories($tableau)
 {
     $affichage = '';
          
-    $affichage = '<select name="categorie" id="cb_categorie" onchange="test(this.value)">';
+    $affichage = '<select name="categorie" id="cb_categorie" onchange="test(this.value); copy_input_value(4);">';
 
     for ($i=0;$i < count($tableau);$i++)
     {
@@ -154,26 +160,32 @@ function affichage_annonces_utilisateur($tableau)
     {
         for($i=0;$i<count($tableau);$i++)
         {
-            $affichage .=   '<div class="user_annonces_table">' . 
+            if($i%2==0)
+                $pair = "";
+            else
+                $pair = 1;
+                
+            $affichage .=   '<div class="user_annonces_table' . $pair . '">' . 
                                 '<div class="photo_user_annonce">';
+            
             if($tableau[$i][4] == 1)
             {
-                $str = put_dirfile_array('../../img/annonces/' . $tableau[$i][0] . '/');
-                $file_type = split_separator($str[0] . '.', '.');
+                $str = mettre_fichier_dossier_dans_tableau('../../img/annonces/' . $tableau[$i][0] . '/');
+                $file_type = couper_avec_separateur($str[0] . '.', '.');
 
-                $affichage .= '<a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'" ><img src="'. '../../img/annonces/' . $tableau[$i][0] . '/0.' . $file_type[1] .'" width="100px" height="100px" /></a>';
+                $affichage .= '<a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'&droit=proprietaire" ><img src="'. '../../img/annonces/' . $tableau[$i][0] . '/0.' . $file_type[1] .'" width="100px" height="100px" /></a>';
             }
             else
             {
-                $affichage .= '<a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'" ><img src="../../img/image_site/No_Image_Available.png" width="100px" height="100px" /></a>';
+                $affichage .= '<a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'&droit=proprietaire" ><img src="../../img/image_site/No_Image_Available.png" width="100px" height="100px" /></a>';
             }
 
              $affichage .= '</div>'.
                      '<div class="menu_rapide">' .
-                      '<div><a href="confirm_delete.php?id_ads='.$tableau[$i][0].'">x</a></div>' .
+                      '<div><a href="confirmer_suppression.php?id='.$tableau[$i][0].'">x</a></div>' .
                         '<div><a href="modifier_annonce.php?id_annonce='. $tableau[$i][0] .'">✍</a></div>' .
                       '</div>' .
-                        '<div class="titre_user_annonce"><a href="./view_annonce.php?id_annonce='. $tableau[$i][0] .'" >'. $tableau[$i][1] .'</a></div>'.
+                        '<div class="titre_user_annonce"><a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'&droit=proprietaire" >'. $tableau[$i][1] .'</a></div>'.
                      
                         '<div class="date_user_annonces">'. $tableau[$i][2] .'</div>' .
                         '<div class="date_user_annonces">'. savoir_les_jours_restants($tableau[$i][2] . '-')[0] .'</div>' .
@@ -188,16 +200,19 @@ function affichage_annonces_utilisateur($tableau)
     
     return $affichage;
 }
-
-function afficher_annonce($tableau, $id, $input_favoris, $bdd)
+/*******************************************************************************
+************* FONCTIONS AFFICHAGE POUR LA PAGE AFFICHER ANNONCES ***************
+*******************************************************************************/
+function afficher_annonce($tableau, $id, $bdd)
 {         
     $affichage = "";
             
     if(!empty($tableau))
     {
+        
         if(savoir_les_jours_restants($tableau[0][3])[1] == false)
         {
-            $titre = '<p class="warning_message">Cette annonce n\'est plus disponible...</p>';
+            $titre = '<span class="warning_message">Cette annonce n\'est plus disponible...</span>';
             $description = "";
             $photos[0] = "";
         }
@@ -207,11 +222,12 @@ function afficher_annonce($tableau, $id, $input_favoris, $bdd)
             $description = $tableau[0][1];
             $photo = $tableau[0][2];
             $date = $tableau[0][3];
-            $prix = $tableau[0][4];
-
+            $prix = $tableau[0][5];
+            $categorie = recupere_categories_par_id($tableau[0][7], $bdd)[0][0];
+            
             if($photo == 1)
             {
-                $photos = display_photo_afficher_annonce($id);
+                $photos = afficher_photo_annonce($id);
             }
             else
             {
@@ -225,32 +241,34 @@ function afficher_annonce($tableau, $id, $input_favoris, $bdd)
     }
     else
     {
-        $titre = '<p class="warning_message">Cette annonce est indisponible...</p>';
+        $titre = '<span class="warning_message">Cette annonce est indisponible...</span>';
         $description = "";
         $photos[0] = "";
         $pseudo_annonceur = 'Indisponible';
         $mail = "";
         $date = "Indisponible";
+        $prix = '<span class="warning_message">Indisponible</span>';
+        $categorie = '';
     }
     
     $affichage .= '<div id="afficher_annonce"><div id="titre_prix"><div id="titre">';
     $affichage .= $titre;
     $affichage .= '</div><div id="prix">Prix :';
     $affichage .= $prix;
-    $affichage .= '</div></div><div id="photos"> <div id="photo_principale">';
+    $affichage .= '</div></div><div id="categorie_annonce">';
+    $affichage .= $categorie;
+    $affichage .= '</div><div id="photos"> <div id="photo_principale">';
     $affichage .= $photos[0];
     $affichage .= '</div><div id="photos_miniatures">';
     
     if($photos[count($photos)-1] == 'multi')
     {
-        $affichage .= display_photo_miniatures($photos);
+        $affichage .= afficher_photo_miniatures($photos);
     }
     
     $affichage .= '</div></div><div id="enveloppe_description"><div id="description">';
     $affichage .= $description;
-    $affichage .= '</div></div><div id="va_menu"><fieldset><legend>Menu</legend><div><form action="#" method="post">';
-    $affichage .= $input_favoris;
-    $affichage .= '</form></div></fieldset></div><div id="infos"><div class="info">Pseudo de l\'annonceur : <span class="red">';
+    $affichage .= '</div></div><div id="infos"><div class="info">Pseudo de l\'annonceur : <span class="red">';
     $affichage .= $pseudo_annonceur;
     $affichage .= '</span></div><div class="info">';
     $affichage .= '<a href="mailto:' . $mail . '">Contacter l\'anonceur par mail</a>';
@@ -258,5 +276,68 @@ function afficher_annonce($tableau, $id, $input_favoris, $bdd)
     $affichage .= 'annonce parrue le : <span class="red">' . $date . '</span>';
     $affichage .= '</div></div></div>';
     
+    return $affichage;
+}
+
+function afficher_photo_annonce($id_annonce)
+{
+    if(dossier_existe('../../img/annonces/' . $id_annonce))
+    {
+        $a_images = mettre_fichier_dossier_dans_tableau('../../img/annonces/' . $id_annonce . '/');
+
+        for($i=0;$i<count($a_images);$i++)
+        {
+            $photos[$i] = '<img src="../../img/annonces/' . $id_annonce . '/' . $a_images[$i] .'"/>';
+        }
+    }
+    
+    if(count($photos) > 1)
+    {
+        $photos[count($photos)] = 'multi';
+    }
+    else
+    {
+        $photos[count($photos)] = 'single';
+    }
+    
+    return $photos;
+}
+
+function afficher_photo_miniatures($tableau)
+{
+    $affichage = '';
+    
+    for($i=1;$i<count($tableau)-1;$i++)
+    {
+        $affichage .= '<div class="img_miniature" name="miniature_' . $i . '" onclick="change_photo(this)">';
+            $affichage .= $tableau[$i];
+        $affichage .= '</div>';
+    }
+    
+    return $affichage;
+}
+/*******************************************************************************
+************* FONCTIONS AFFICHAGE POUR LA PAGE MODIFIER ANNONCES ***************
+*******************************************************************************/
+function afficher_photo_miniature_modifier($tableau, $id_annonce)
+{
+    $affichage = '';
+    if(dossier_existe('../../img/annonces/' . $id_annonce))
+    {
+        $a_images = mettre_fichier_dossier_dans_tableau('../../img/annonces/' . $id_annonce . '/');
+    
+        for($i=1;$i<count($tableau)-1;$i++)
+        {
+            $affichage .= '<div class="gp_miniature"><div class="modifier_img_miniature">';
+                $affichage .= $tableau[$i];
+            $affichage .= '</div>';
+            $affichage .= '<div class="supprimer_photo_miniature"><a href="modifier_annonce.php?id_annonce='.$id_annonce.'&photo_supprimer='. $a_images[$i] . '">x</a></div></div>';
+        }
+    }
+    $affichage .=   '<div class="gp_miniature">' .
+                        '<form action="modifier_annonce.php?id_annonce='.$id_annonce.'" method="post" enctype="multipart/form-data">' .
+                            '<input type="file" name="photos[]" multiple onchange="this.form.submit();"/><br/>' .
+                        '</form>' .
+                    '</div>';
     return $affichage;
 }

@@ -50,7 +50,6 @@ else
 
 if(isset($_REQUEST["btn_poster"]))
 {
-    var_dump_pre($_SESSION);
     if(isset($_REQUEST["tbx_titre_annonce"], $_REQUEST["text_annonce"],  
             $_REQUEST['date_debut'],$_REQUEST['categorie'] ))
     {
@@ -92,7 +91,7 @@ if(isset($_REQUEST["btn_poster"]))
             
             for($z=0;$z<$nb;$z++)
             {
-                move_uploaded_file($_FILES['photos']['tmp_name'][$z], '../../img/annonces/'. $lastinsertid . '/' . $z . get_image_format_file($_FILES['photos']['type'][$z]));
+                move_uploaded_file($_FILES['photos']['tmp_name'][$z], '../../img/annonces/'. $lastinsertid . '/' . $z . changer_formats($_FILES['photos']['type'][$z]));
             }
         }
     }
@@ -102,9 +101,9 @@ if(isset($_REQUEST["btn_poster"]))
     }
 }
 
-if(isset($_REQUEST["DELETE_FAVORIS"]))
+if(isset($_REQUEST['erreur']))
 {
-    enlever_favoris($_SESSION["ID"], $_REQUEST["DELETE_FAVORIS"], $bdd);
+    echo afficher_erreur($_REQUEST['erreur']);
 }
 
 ?>
@@ -115,7 +114,7 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html>
     <head>
-        <title>site annonces ligne</title>
+        <title>AnnoLigne</title>
         <meta name="keywords" lang="fr" content="motcle1,mocle2" />
         <meta name="description" content="Description de ma page web." />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

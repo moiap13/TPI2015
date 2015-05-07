@@ -191,7 +191,7 @@ a:active
     width: 44%;
     height: 680px;
     float: left;
-    border-left: 1px solid black;
+    //border-left: 1px solid black;
     border-right: 1px solid black;
 }
 .ligne_petite
@@ -235,18 +235,30 @@ a:active
 }
 #user_annonces
 {
-    width: 27.8%;
+    width: 55.5%;
     height: 680px;
     float: left;
+    //background-color: aqua;
 }
 .user_annonces_table
 {
-    width: 100%;
+    width: 49%;
     height: 100px;
     border-bottom: 2px solid black;
     margin-top: 10px;
     margin-bottom: 10px;
     //background-color: aqua;
+    float: left;
+}
+.user_annonces_table1
+{
+    width: 50%;
+    height: 100px;
+    border-bottom: 2px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    //background-color: aqua;
+    float: right;
 }
 .photo_user_annonce
 {

@@ -27,8 +27,11 @@ function recupere_users_par_id($id, $bdd)
     $requete = $bdd->prepare($sql);
     $requete->execute(array('id' => $id));
     
+    
     if(!empty($requete))
+    {
         $requete->fetchAll();
+    }
     
     return $requete;
 }
@@ -68,4 +71,30 @@ function ajout_annonce($titre, $texte, $date,$prix,$id_user,$id_categorie, $phot
     ));
     
     return $bdd->lastInsertId();
+}
+function maj_annonce($id, $titre, $prix, $description, $date, $categorie, $bdd)
+{
+    $modifie = $bdd->prepare('UPDATE annonces SET titre=:titre, prix=:prix, description=:description, date_debut=:date, idCategorie=:categorie WHERE idAnnonce=:id');
+    $modifie->execute(array(
+        'titre' => $titre,
+        'prix' => $prix,
+        'description' => $description,
+        'date' => $date,
+        'categorie' => $categorie,
+        'id' => $id
+    ));
+}
+function supprimer_annonce($id, $bdd)
+{
+    $ajout = $bdd->prepare('DELETE FROM annonces WHERE idAnnonce = :id');
+    $ajout->execute(array('id' => $id));
+}
+
+function maj_photo($id, $valeur_photo, $bdd)
+{
+    $modifie = $bdd->prepare('UPDATE annonces SET photo=:photo WHERE idAnnonce=:id');
+    $modifie->execute(array(
+        'photo' => $valeur_photo,
+        'id' => $id
+    ));
 }

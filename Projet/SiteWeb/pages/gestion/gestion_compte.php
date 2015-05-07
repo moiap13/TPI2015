@@ -35,7 +35,6 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
     
     if($_SESSION['ADMIN'] == 1)
     {
-        //$pseudo = '<p><a href="pages/utilisateur/gestion_site.php">Gérer le site</a></p>';
         $pseudo = creer_menu_admin('../../');
     }
     
@@ -45,7 +44,7 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
     {
         if($utilisateur[0][3] == 0)
         {
-            $avatar_image = '<img src="../../img/image_site/avatar.jpeg" />';
+            $avatar_image = '<img src="../../img/image_site/avatar.jpeg" id="img_avatar"/>';
         }
         else
         {
@@ -55,9 +54,9 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
             }
             
             if(!empty($a_images))
-                $avatar_image = '<img src="../../img/avatar/'. $_SESSION['ID'] .'/'. $a_images[0] .'" />';
+                $avatar_image = '<img src="../../img/avatar/'. $_SESSION['ID'] .'/'. $a_images[0] .'" id="img_avatar"/>';
             else
-                $avatar_image = '<img src="../../img/image_site/avatar.jpeg" />';
+                $avatar_image = '<img src="../../img/image_site/avatar.jpeg" id="img_avatar"/>';
         }
         
         $placeholder_mail = $utilisateur[0][0];
@@ -117,7 +116,23 @@ if(isset($_REQUEST['btn_supprimer_avatar']))
     modification_avatar($_SESSION['ID'], $avatar, $bdd);
 }
 
-
+if(isset($_REQUEST['btn_modifier_infos']))
+{
+    /*
+    var_dump_pre($_REQUEST);
+    
+    $mail = ($_REQUEST['tbxemail'] != ''?$_REQUEST['tbxemail']:'');
+    $pseudo = ($_REQUEST['tbxpseudo'] != ''?$_REQUEST['tbxpseudo']:'');
+    $mdp = ($_REQUEST['tbxancienmdp'] != ''?$_REQUEST['tbxancienmdp']:'');
+    $mdp_2 = ($_REQUEST['tbxnouveaumdp'] != ''?$_REQUEST['tbxnouveaumdp']:'');
+    $mdp_3 = ($_REQUEST['tbxnouveaumdp_2'] != ''?$_REQUEST['tbxnouveaumdp_2']:'');
+    
+    if($mail != '')
+    {
+        header("Location: ../connexion/deconnexion.php?page=login.php&user=$mail&mdp=".$utilisateur[0][2]."&page_2=../gestion/gestion")
+    }
+    */
+}
 ?>
 <!--
 To change this template, choose Tools | Templates
@@ -170,7 +185,7 @@ and open the template in the editor.
                                 <div id="input_avatar">
                                     <form action="#" method="post" enctype="multipart/form-data">
                                         <p>Pour changer votre avatar veuillez séléctionner une photo</p>
-                                        <input type="file" name="avatar"  class="grande_taille" />
+                                        <input type="file" name="avatar"  class="grande_taille" onchage="appercu_img(this);"/>
                                         <input type="submit" name="btn_avatar" value="Charger la photo" />
                                     </form>
                                     <form action="#" method="post">
@@ -179,44 +194,46 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div id="form_infos">
-                                <div id="table_form">
-                                    <div id="titre_table">
-                                        Modification de ses données (seul les champs remplit seront pris en compte)
+                                <form action="#" method="post">
+                                    <div id="table_form">
+                                        <div id="titre_table">
+                                            Modification de ses données (seul les champs remplit seront pris en compte)
+                                        </div>
+                                        <div class="ligne">
+                                            <div class="cellule"> Email</div>
+                                            <div class="deux_points">: </div>
+                                            <div class="cellule"><input type="text" name="tbxemail" placeholder="<?php echo $placeholder_mail; ?>"/> </div>
+                                        </div>
+                                        <div class="ligne">
+                                            <div class="cellule"> Pseudo</div>
+                                            <div class="deux_points">: </div>
+                                            <div class="cellule"><input type="text" name="tbxpseudo" placeholder="<?php echo $placeholder_pseudo; ?>"/> </div>
+                                        </div>
+                                        <div class="ligne">
+                                            <div class="cellule"> Ancien mot de passe</div>
+                                            <div class="deux_points">: </div>
+                                            <div class="cellule"><input type="password" name="tbxancienmdp" placeholder="<?php echo $placeholder_mdp; ?>" id="tbx_pwd"/> </div>
+                                        </div>
+                                        <div class="ligne">
+                                            <div class="cellule"> nouveau Mot de passe</div>
+                                            <div class="deux_points">: </div>
+                                            <div class="cellule"><input type="password" name="tbxnouveaumdp" id="tbx_pwd_2"/> </div>
+                                        </div>
+                                        <div class="ligne">
+                                            <div class="cellule"> confirmer nouveau mot de passe</div>
+                                            <div class="deux_points">: </div>
+                                            <div class="cellule"><input type="password" name="tbxnouveaumdp_2" id="tbx_pwd_3"/> </div>
+                                        </div>
+                                        <div class="ligne">
+                                            <div class="cellule">Afficher MDP</div>
+                                            <div class="deux_points">:</div>
+                                            <div class="cellule"><input type="checkbox" name="ckb_show_pwd" id="ckb" onclick="showPwd();"/></div>
+                                        </div>
+                                        <div class="ligne retour_ligne">
+                                            <input type="submit" name="btn_modifier_infos" value="Modifier ses données" />
+                                        </div>
                                     </div>
-                                    <div class="ligne">
-                                        <div class="cellule"> Email</div>
-                                        <div class="deux_points">: </div>
-                                        <div class="cellule"><input type="text" name="tbxemail" placeholder="<?php echo $placeholder_mail; ?>"/> </div>
-                                    </div>
-                                    <div class="ligne">
-                                        <div class="cellule"> Pseudo</div>
-                                        <div class="deux_points">: </div>
-                                        <div class="cellule"><input type="text" name="tbxpseudo" placeholder="<?php echo $placeholder_pseudo; ?>"/> </div>
-                                    </div>
-                                    <div class="ligne">
-                                        <div class="cellule"> Ancien mot de passe</div>
-                                        <div class="deux_points">: </div>
-                                        <div class="cellule"><input type="password" name="tbxancienmdp" placeholder="<?php echo $placeholder_mdp; ?>" id="tbx_pwd"/> </div>
-                                    </div>
-                                    <div class="ligne">
-                                        <div class="cellule"> nouveau Mot de passe</div>
-                                        <div class="deux_points">: </div>
-                                        <div class="cellule"><input type="password" name="tbxnouveaumdp" id="tbx_pwd_2"/> </div>
-                                    </div>
-                                    <div class="ligne">
-                                        <div class="cellule"> confirmer nouveau mot de passe</div>
-                                        <div class="deux_points">: </div>
-                                        <div class="cellule"><input type="password" name="tbxnouveaumdp_2" id="tbx_pwd_3"/> </div>
-                                    </div>
-                                    <div class="ligne">
-                                        <div class="cellule">Afficher MDP</div>
-                                        <div class="deux_points">:</div>
-                                        <div class="cellule"><input type="checkbox" name="ckb_show_pwd" id="ckb" onclick="showPwd();"/></div>
-                                    </div>
-                                    <div class="ligne retour_ligne">
-                                        <input type="submit" name="btn_modifier_infos" value="Modifier ses données" />
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </fieldset>

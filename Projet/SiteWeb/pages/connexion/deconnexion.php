@@ -11,4 +11,7 @@ session_start();
 
 $_SESSION["conn"] = false;
 
-header("Location: ../../index.php");
+if(isset($_REQUEST["page"]))
+    header("Location: " . $_REQUEST["page"] . ".php");
+else
+    header("Location: ../../index.php");

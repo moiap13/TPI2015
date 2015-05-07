@@ -20,15 +20,15 @@ include '../../fonctions/fonction_affichage_donnee.php';
 include '../../fonctions/fonction_connexion.php';
 include '../../parametres/parametres.php';
 
-$s_login = "Login";
-$s_url = "login.php";
-$pseudo = '';
+$s_login = "Connexion";
+$s_url = "connexion.php";
 $lien_menu_annonces = '';
-$input_favoris = '<input type="submit" name="btn_favoris" value="ajouter aux favoris" disabled/>';
+$lien_gestion_compte = '';
+$pseudo = '';
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_SESSION['conn']) && $_SESSION['conn'])
+if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
     $s_url = "deconnexion.php";
@@ -45,29 +45,26 @@ if(isset($_SESSION['conn']) && $_SESSION['conn'])
 
 if(isset($_REQUEST['id_annonce']))
 {
+    $id_annonce = $_REQUEST['id_annonce'];
     $annonce = recupere_annonces_par_id($_REQUEST['id_annonce'], $bdd);
-    
-    echo '<pre>';
-    var_dump($annonce);
-    echo '</pre>';
-    
+}
+else 
+{
+    $annonce = "";
 }
 
+if(!isset($_REQUEST['droit']))
+{
+    $jours = savoir_les_jours_restants($annonce[0][3])[0];
+    $jours = $jours[0] . $jours[1];
 
-if(isset($_REQUEST["btn_favoris"]))
-{   
-    if(check_favoris($_SESSION["ID"], $_REQUEST['id_annonce'], $bdd))
+    if($jours <= 15 && $annonce[0][6] == 0)
     {
-        ajout_favoris($_SESSION["ID"], $_REQUEST['id_annonce'], $bdd);
-        $input_favoris = '<input type="submit" name="btn_enlever_favoris" value="enlever des favoris" />';
+        $annonce = "";
     }
 }
 
-if(isset($_REQUEST["btn_enlever_favoris"]))
-{   
-    enlever_favoris($_SESSION["ID"], $_REQUEST['id_annonce'], $bdd);
-    $input_favoris = '<input type="submit" name="btn_favoris" value="ajouter aux favoris" />';
-}
+
 ?>
 <!--
 To change this template, choose Tools | Templates
@@ -76,13 +73,15 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html>
     <head>
-        <title>site annonces ligne</title>
+        <title>AnnoLigne</title>
         <meta name="keywords" lang="fr" content="motcle1,mocle2" />
         <meta name="description" content="Description de ma page web." />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="Content-Language" content="fr" />
         <meta http-equiv="Content-Script-Type" content="text/javascript" />
         <link href="../../css/style_afficher_annonces.css" rel="stylesheet" type="text/css" />
+        <link href="../../css/menu_deroulant.css" rel="stylesheet" type="text/css" />
+        <script src="../../javascript/fonction_globales.js"></script>
         <script type="text/javascript" src="../../javascript/galerie_photo.js"></script>
     </head>
     <body>
@@ -91,13 +90,15 @@ and open the template in the editor.
         ?>
         <div id="principal">
             <div id="banniere">
-                <div class="div_banniere"></div>
+                <div class="div_banniere"><p id="display_user"><?php echo $pseudo; ?></p></div>
                 <div class="div_banniere">
-                    <p id="display_user"><?php echo $pseudo; ?></p>
+                    <?php
+                        echo $lien_gestion_compte;
+                    ?>
                 </div>
                 <div class="div_banniere"><p id="titre_site"><a href="../../index.php">AnnoLigne<br/>Site d'annonce en ligne</a></p></div>
                 <div class="div_banniere">
-                    <a href="../connection/<?php echo $s_url; ?>"><?php echo $s_login; ?></a>
+                    <p><a href="../connexion/<?php echo $s_url; ?>"><?php echo $s_login; ?></a></p>
                 </div>
                 <div class="div_banniere">
                     <?php
@@ -109,7 +110,7 @@ and open the template in the editor.
                 <?php echo afficher_categories(recupere_categories($bdd), 0);  ?>
             </div>
             <div id="contenent">
-                <?php echo afficher_annonce($annonce, $_REQUEST['id_annonce'], $input_favoris, $bdd); ?>
+                <?php echo afficher_annonce($annonce, $id_annonce, $bdd); ?>
             </div>
             <div id="pied_page">
                 
