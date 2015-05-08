@@ -155,8 +155,7 @@ function afficher_combobox_categories($tableau)
     {
         $affichage .= '<option value="' . $tableau[$i][0] . '">'. $tableau[$i][1] .'</option>';
     }
-     
-    $affichage .= '<option value="new">Autre</option>';
+    
     $affichage .= '</select>';
     
     return $affichage;
@@ -361,50 +360,175 @@ function afficher_annonces_gestion_annonce($tableau)
     $nb_ligne = $nb_annonces / 3;
     
     
-    
-    for($i=0;$i<$nb_ligne;$i++)
+    if(!empty($tableau))
     {
-        $affichage .= '<div class="ligne_gestion">';
-        
-        for($y=0;$y<3;$y++)
+        for($i=0;$i<$nb_ligne;$i++)
         {
-            if(isset($tableau[$i_index]))
+            $affichage .= '<div class="ligne_gestion">';
+
+            for($y=0;$y<3;$y++)
             {
-                if($y==0)
-                    $affichage .= '<div class="gestion_annonces_table">';
-                else
-                    $affichage .= '<div class="gestion_annonces_table1">';
-
-                $affichage .= '<div class="photo_gestion_annonce">';
-
-                if($tableau[$i_index][3] == 1)
+                if(isset($tableau[$i_index]))
                 {
-                    $str = mettre_fichier_dossier_dans_tableau('../../img/annonces/' . $tableau[$i_index][0] . '/');
-                    $file_type = couper_avec_separateur($str[0] . '.', '.');
+                    if($y==0)
+                        $affichage .= '<div class="gestion_table">';
+                    else
+                        $affichage .= '<div class="gestion_table1">';
 
-                    $affichage .= '<a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" ><img src="'. '../../img/annonces/' . $tableau[$i_index][0] . '/0.' . $file_type[1] .'" width="100px" height="100px" /></a>';
+                    $affichage .= '<div class="photo_gestion">';
+
+                    if($tableau[$i_index][3] == 1)
+                    {
+                        $str = mettre_fichier_dossier_dans_tableau('../../img/annonces/' . $tableau[$i_index][0] . '/');
+                        $file_type = couper_avec_separateur($str[0] . '.', '.');
+
+                        $affichage .= '<a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" ><img src="'. '../../img/annonces/' . $tableau[$i_index][0] . '/0.' . $file_type[1] .'" width="100px" height="100px" /></a>';
+                    }
+                    else
+                    {
+                        $affichage .= '<a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" ><img src="../../img/image_site/No_Image_Available.png" width="100px" height="100px" /></a>';
+                    }
+                    $affichage .= '</div>'.
+
+                    '<div class="titre_gestion"><a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" >'. $tableau[$i_index][1] .'</a></div>'.
+
+                    '<div class="description_gestion">'. $tableau[$i_index][2] .'</div>' .
+                    '<div class="form_gestion">'
+                            . '<form action="../annonces/confirmer_suppression.php?id='. $tableau[$i_index][0].'&droit=admin" method="post"><input type="submit" name="btn_supprimer" value="Suprimer" /></form>'
+                            . '<form action="gestion_annonces.php?id_annonce='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_activer" value="Rendre active" /></form>'
+                    . '</div></div>';
+
+
+                    $i_index++;
                 }
-                else
-                {
-                    $affichage .= '<a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" ><img src="../../img/image_site/No_Image_Available.png" width="100px" height="100px" /></a>';
-                }
-                $affichage .= '</div>'.
-                
-                '<div class="titre_gestion_annonce"><a href="../annonces/afficher_annonce.php?id_annonce='. $tableau[$i_index][0] .'&droit=admin" >'. $tableau[$i_index][1] .'</a></div>'.
 
-                '<div class="description_gestion_annonces">'. $tableau[$i_index][2] .'</div>' .
-                '<div class="form_gestion_annonces">'
-                        . '<form action="../annonces/confirmer_suppression.php?id='. $tableau[$i_index][0].'&droit=admin" method="post"><input type="submit" name="btn_supprimer" value="Suprimer" /></form>'
-                        . '<form action="gestion_annonces.php?id_annonce='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_activer" value="Rendre active" /></form>'
-                . '</div></div>';
-
-
-                $i_index++;
             }
-            
+
+            $affichage .= "</div>";
         }
-        
-        $affichage .= "</div>";
+    }
+    else
+    {
+        $affichage = '<p class="warning_message">Aucune Annonces à afficher</p>';
+    }
+    
+    return $affichage;
+}
+
+function afficher_categories_gestion_categorie($tableau, $bdd)
+{
+    $affichage = "";
+    $i_index = 0;
+    
+    $nb_categories = count($tableau);
+    
+    $nb_ligne = $nb_categories / 3;
+    
+    if(!empty($tableau))
+    {
+        for($i=0;$i<$nb_ligne;$i++)
+        {
+            $affichage .= '<div class="ligne_gestion">';
+
+            for($y=0;$y<4;$y++)
+            {
+                if(isset($tableau[$i_index]))
+                {
+                    if($y==0)
+                        $affichage .= '<div class="gestion_table_categorie">';
+                    else
+                        $affichage .= '<div class="gestion_table1_categorie">';
+
+                    $affichage .= '<div class="titre_gestion_categorie"><a href="../recherche/recherche.php?categorie='. $tableau[$i_index][0] .'" >'. $tableau[$i_index][1] .' - ' . recupere_nb_annonce_par_categorie($tableau[$i_index][0], $bdd) . '</a></div>'.
+
+                    '<div class="description_gestion_categorie">'. $tableau[$i_index][2] .'</div>' .
+                    '<div class="form_gestion_categorie">'
+                            . '<form action="../categorie/confirmer_suppression_categorie.php?id='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_supprimer" value="Suprimer" /></form>'
+                            . '<form action="../categorie/modifier_categorie.php?id='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_modifier" value="modifier" /></form>'
+                    . '</div></div>';
+
+
+                    $i_index++;
+                }
+
+            }
+
+            $affichage .= "</div>";
+        }
+    }
+    else
+    {
+        $affichage = '<p class="warning_message">Aucune Annonces à afficher</p>';
+    }
+    
+    return $affichage;
+}
+
+function afficher_utilisateur_gestion($tableau)
+{
+    $affichage = "";
+    $i_index = 0;
+    
+    $nb_utilisateurs = count($tableau);
+    
+    $nb_ligne = $nb_utilisateurs / 3;
+    
+    
+    if(!empty($tableau))
+    {
+        for($i=0;$i<$nb_ligne;$i++)
+        {
+            $affichage .= '<div class="ligne_gestion">';
+            for($y=0;$y<3;$y++)
+            {
+                if(isset($tableau[$i_index]))
+                {
+                    if($y==0)
+                        $affichage .= '<div class="gestion_table">';
+                    else
+                        $affichage .= '<div class="gestion_table1">';
+
+                    $affichage .= '<div class="photo_gestion">';
+
+                    if($tableau[$i_index][3] == 1)
+                    {
+                        $str = mettre_fichier_dossier_dans_tableau('../../img/avatar/' . $tableau[$i_index][0] . '/');
+
+                        $affichage .= '<a href="" ><img src="'. '../../img/avatar/' . $tableau[$i_index][0] . '/' . $str[0] . '" width="100px" height="100px" /></a>';
+                    }
+                    else
+                    {
+                        $affichage .= '<a href="" ><img src="../../img/image_site/avatar.jpeg" width="100px" height="100px" /></a>';
+                    }
+                    $affichage .= '</div>'.
+
+                    '<div class="titre_gestion"><a href="" >'. $tableau[$i_index][1] . ' - ' . convertir_statut($tableau[$i_index][2]) . '</a></div>'.
+
+                    '<div class="description_gestion">Nombre d\'annonnces : <label class="nom_categorie">' . $tableau[$i_index][4] .'</label></div>' .
+                    '<div class="form_gestion">'
+                            . '<form action="../connexion/confirmer_suppression_utilisateur.php?id='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_supprimer" value="Suprimer" /></form>';
+                    if($tableau[$i_index][2] == 0)
+                    {
+                        $affichage .= '<form action="gestion_utilisateur.php?id='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_rendre_admin" value="Rendre Admin" /></form>';
+                    }
+                    else
+                    {
+                        $affichage .= '<form action="gestion_utilisateur.php?id='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_enlever_admin" value="Enlever Admin" /></form>';
+                    }
+                    $affichage .= '</div></div>';
+
+
+                    $i_index++;
+                }
+
+            }
+
+            $affichage .= "</div>";
+        }
+    }
+    else
+    {
+        $affichage = '<p class="warning_message">Aucune Annonces à afficher</p>';
     }
     
     return $affichage;

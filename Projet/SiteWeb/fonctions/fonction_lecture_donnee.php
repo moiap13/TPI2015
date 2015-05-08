@@ -99,3 +99,55 @@ function recupere_annonces_non_actives($bdd)
     
     return $requete;
 }
+/*******************************************************************************************************************************/
+/******************************************** Page gestion categories **********************************************************/
+/*******************************************************************************************************************************/
+function recupere_categories_gestion_categorie($bdd)
+{
+    $sql = "select * from categories";
+    
+    $requete = $bdd->prepare($sql);
+    $requete->execute();
+    
+    if(!empty($requete))
+        $requete = $requete->fetchAll();
+    
+    return $requete;
+}
+function recupere_nb_annonce_par_categorie($id, $bdd)
+{
+    $sql = "select count(idAnnonce) from annonces WHERE idCategorie=:id";
+    
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+    
+    if(!empty($requete))
+        $requete = $requete->fetchAll();
+    
+    return $requete[0][0];
+}
+
+function recupere_categories_par_id_gestion($id, $bdd)
+{
+    $sql = "select * from categories where idCategorie=:id";
+    
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+    
+    if(!empty($requete))
+        $requete = $requete->fetchAll();
+    
+    return $requete;
+}
+
+function recupere_utilisateur_gestion($bdd)
+{
+    $sql ="select idUtilisateur, pseudo, statut, avatar, COUNT(idAnnonce) FROM utilisateur natural left join annonces GROUP BY idUtilisateur";
+    $requete = $bdd->prepare($sql);
+    $requete->execute();
+    
+    if($requete != false)
+        $requete = $requete->fetchAll();
+    
+    return $requete;
+}

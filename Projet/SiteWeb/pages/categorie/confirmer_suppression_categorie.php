@@ -19,32 +19,19 @@ if(!isset($_SESSION['CONN']) && !$_SESSION['CONN'])
 
 if(isset($_REQUEST['id']))
 {
-    $annonce = recupere_annonces_par_id($_REQUEST['id'], $bdd);
-    $titre = $annonce[0][0];
-}
-
-if($_REQUEST['droit'] == 'proprietaire')
-{
-    if($annonce[0][4] != $_SESSION['ID'])
-        header('Location: menu_annonces.php');
+    $categorie = recupere_categories_par_id_gestion($_REQUEST['id'], $bdd);
+    $titre = $categorie[0][1];
 }
     
 if(isset($_REQUEST['btn_non']))
 {
-    if($_REQUEST['droit'] == 'proprietaire')
-        header('Location: menu_annonces.php');
-    else if($_REQUEST['droit'] == 'admin')
-        header ("Location: ../gestion/gestion_annonces.php");
+    header ("Location: ../gestion/gestion_categorie.php");
 }
 
 if(isset($_REQUEST['btn_oui']))
 {
-    supprimer_annonce($_REQUEST['id'], $bdd);
-    
-    if($_REQUEST['droit'] == 'proprietaire')
-        header('Location: menu_annonces.php?erreur=15');
-    else if($_REQUEST['droit'] == 'admin')
-        header ("Location: ../gestion/gestion_annonces.php?erreur=15");
+    supprimer_categorie($_REQUEST['id'], $bdd);
+    header ("Location: ../gestion/gestion_categorie.php?erreur=17");
 }
 ?>
 <!DOCTYPE html>
@@ -57,15 +44,12 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title>AnnoLigne</title>
+        <link href="../../css/style_gestion.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <?php
-        // put your code here
-        ?>
         <div>
-            <form action="confirmer_suppression.php?id=<?php echo $_REQUEST['id']; ?>&droit=<?php echo $_REQUEST['droit']; ?>" method="post">
-                <h1>Voulez vous vraiment supprimer l'annonce suivante</h1><br/>
-                titre : <?php echo $titre; ?> <br/>
+            <form action="confirmer_suppression_categorie.php?id=<?php echo $_REQUEST['id']; ?>" method="post">
+                <h1>Voulez vous vraiment supprimer la categorie <label class="nom_categorie"><?php echo $titre; ?></label></h1><br/>
                 <input type="submit" value='oui' name='btn_oui'/>
                 <input type="submit" value='non' name='btn_non'/>
             </form>

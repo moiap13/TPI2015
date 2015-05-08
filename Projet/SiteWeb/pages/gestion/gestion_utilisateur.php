@@ -24,16 +24,19 @@ $pseudo = '';
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_REQUEST['btn_activer']))
+if(isset($_REQUEST['btn_rendre_admin']))
 {
-    maj_active($_REQUEST['id_annonce'], 1, $bdd);
-    
-    echo afficher_erreur(18);
+    maj_admin($_REQUEST['id'], 1, $bdd);
+    echo afficher_erreur(20);
 }
 
-if(isset($_REQUEST['btn_supprimer']))
+if(isset($_REQUEST['btn_enlever_admin']))
 {
-    supprimer_annonce($_REQUEST['id_annonce'], $bdd);
+    if($_SESSION['ID'] == $_REQUEST['id'])
+    {
+        $_SESSION['ADMIN'] = 0;
+    }
+    maj_admin($_REQUEST['id'], 0, $bdd);
 }
 
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
@@ -48,6 +51,10 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
     if($_SESSION['ADMIN'] == 1)
     {
         $pseudo = creer_menu_admin('../../');
+    }
+    else
+    {
+       header('Location: ../../index.php?erreur=21'); 
     }
 }
 else
@@ -101,10 +108,10 @@ and open the template in the editor.
             <div id="contenent">
                 <div id="bienvenue">
                     <span>Bienvennue - <?php echo $_SESSION['PSEUDO']; ?></span>
-                    <p>Gestion des annonces</p>
+                    <p>Gestion des Utilisateurs</p>
                 </div>
                 <div id="gestion">
-                    <?php echo afficher_annonces_gestion_annonce(recupere_annonces_non_actives($bdd)); ?>
+                    <?php echo afficher_utilisateur_gestion(recupere_utilisateur_gestion($bdd)); ?>
                 </div>
             </div>
             <div id="pied_page">

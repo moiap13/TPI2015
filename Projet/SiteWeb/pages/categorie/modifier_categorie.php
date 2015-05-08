@@ -24,18 +24,6 @@ $pseudo = '';
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_REQUEST['btn_activer']))
-{
-    maj_active($_REQUEST['id_annonce'], 1, $bdd);
-    
-    echo afficher_erreur(18);
-}
-
-if(isset($_REQUEST['btn_supprimer']))
-{
-    supprimer_annonce($_REQUEST['id_annonce'], $bdd);
-}
-
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
@@ -56,11 +44,18 @@ else
     exit();
 }
 
-if(isset($_REQUEST['erreur']))
+if(isset($_REQUEST['id']))
 {
-    echo afficher_erreur($_REQUEST['erreur']);
+    $categorie = recupere_categories_par_id_gestion($_REQUEST['id'], $bdd);
+    $titre = $categorie[0][1];
+    $description = $categorie[0][2];
 }
 
+if(isset($_REQUEST['btn_modifier_2']))
+{
+    maj_categorie($_REQUEST['id'], $_REQUEST['tbxtitre'], $_REQUEST['tbxdescription'], $bdd);
+    header('Location: ../gestion/gestion_categorie.php?erreur=16');
+}
 ?>
 <!--
 To change this template, choose Tools | Templates
@@ -101,10 +96,24 @@ and open the template in the editor.
             <div id="contenent">
                 <div id="bienvenue">
                     <span>Bienvennue - <?php echo $_SESSION['PSEUDO']; ?></span>
-                    <p>Gestion des annonces</p>
+                    <p>Modification de la categorie <label class="nom_categorie"><?php echo $titre; ?></label></p>
                 </div>
                 <div id="gestion">
-                    <?php echo afficher_annonces_gestion_annonce(recupere_annonces_non_actives($bdd)); ?>
+                    <div class="ligne_gestion">
+                        <div class="gestion_table_categorie_modification">
+                            <form action="modifier_categorie.php?id=<?php echo $_REQUEST['id']; ?>" method="post">
+                                <div class="titre_gestion_categorie">titre : <input type="text" name="tbxtitre" value="<?php echo $titre;?>" /></div>
+
+                                <div class="description_gestion_categorie">description : <input type="text" name="tbxdescription" value="<?php echo $description;?>" /></div>
+                                <div class="form_gestion_categorie"> 
+                                    <input type="submit" name="btn_modifier_2" value="Modifier" />
+                                    <a href="../gestion/gestion_categorie.php">
+                                        <input type="button" value="Annuler">
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="pied_page">

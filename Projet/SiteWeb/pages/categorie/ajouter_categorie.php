@@ -24,18 +24,6 @@ $pseudo = '';
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_REQUEST['btn_activer']))
-{
-    maj_active($_REQUEST['id_annonce'], 1, $bdd);
-    
-    echo afficher_erreur(18);
-}
-
-if(isset($_REQUEST['btn_supprimer']))
-{
-    supprimer_annonce($_REQUEST['id_annonce'], $bdd);
-}
-
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
@@ -56,11 +44,11 @@ else
     exit();
 }
 
-if(isset($_REQUEST['erreur']))
+if(isset($_REQUEST['btn_ajouter']))
 {
-    echo afficher_erreur($_REQUEST['erreur']);
+    ajouter_categorie($_REQUEST['tbxtitre'], $_REQUEST['tbxdescription'], $bdd);
+    header('Location: ../gestion/gestion_categorie.php?erreur=');
 }
-
 ?>
 <!--
 To change this template, choose Tools | Templates
@@ -101,10 +89,24 @@ and open the template in the editor.
             <div id="contenent">
                 <div id="bienvenue">
                     <span>Bienvennue - <?php echo $_SESSION['PSEUDO']; ?></span>
-                    <p>Gestion des annonces</p>
+                    <p>Ajouter une nouvelle catégorie</p>
                 </div>
                 <div id="gestion">
-                    <?php echo afficher_annonces_gestion_annonce(recupere_annonces_non_actives($bdd)); ?>
+                    <div class="ligne_gestion">
+                        <div class="gestion_table_categorie_modification">
+                            <form action="ajouter_categorie.php" method="post">
+                                <div class="titre_gestion_categorie">titre : <input type="text" name="tbxtitre" value="" /></div>
+
+                                <div class="description_gestion_categorie">descriptif : <input type="text" name="tbxdescription" value="" /></div>
+                                <div class="form_gestion_categorie"> 
+                                    <input type="submit" name="btn_ajouter" value="Ajouter" />
+                                    <a href="../gestion/gestion_categorie.php">
+                                        <input type="button" value="Annuler">
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="pied_page">

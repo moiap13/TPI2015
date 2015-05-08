@@ -26,7 +26,7 @@ if(isset($_REQUEST["btninscr"]) == true)
 {
     
     if(filter_input(INPUT_POST, "tbxemail", FILTER_VALIDATE_EMAIL))
-    {var_dump_pre($pseudo);
+    {
         $sql = 'select idUtilisateur from utilisateur where Email = :mail';
         $requete = $bdd->prepare($sql);
         $requete->execute(array(':mail' => $_REQUEST['tbxemail']));

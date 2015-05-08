@@ -449,6 +449,27 @@ function afficher_erreur($erreur)
         case 14:
             $result = "Annonce modifiée correctement";
             break; 
+        case 15:
+            $result = "Annonce correctement supprimée";
+            break;
+        case 16:
+            $result = "Categorie modifiée correctement";
+            break; 
+        case 17:
+            $result = "Categorie correctement supprimée";
+            break;
+        case 18:
+            $result = "Annonce rendue active";
+            break;
+        case 19:
+            $result = "Utilisateur correctement supprimer";
+            break;
+        case 20:
+            $result = "Utilisateur correctement changé de statut";
+            break;
+        case 21:
+            $result = "vous devez être admin";
+            break;
     }
     
     return $affichage = '<script type="text/javascript">alert("' . $result . '");</script>';
@@ -461,9 +482,9 @@ function creer_menu_admin($chemin)
     $affichage .= '<ul id="menu-deroulant">';
 	$affichage .= '<li><img src="'.$chemin.'img/image_site/bouton_menu.png" width="10" height="10"/> Gestion du site ';
 		$affichage .= '<ul>';
-			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_utilisateurs.php">Gestion utilisateurs</a></li>';
+			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_utilisateur.php">Gestion utilisateurs</a></li>';
 			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_annonces.php">Gestion annonces</a></li>';
-			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_catégories.php">Gestion catégories</a></li>';
+			$affichage .= '<li><a href="'.$chemin.'pages/gestion/gestion_categorie.php">Gestion catégories</a></li>';
 		$affichage .= '</ul>';
 	$affichage .= '</li>';
     $affichage .= '</ul>';
@@ -484,4 +505,18 @@ function verifie_categorie($name, $bdd)
     }
     
     return $return;
+}
+
+function convertir_statut($statut)
+{
+    if($statut == 0)
+    {
+        return 'Utilisateur';
+    }
+    else if($statut == 1)
+    {
+        return 'Admin';
+    }
+        
+        
 }

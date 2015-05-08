@@ -43,14 +43,7 @@ function modification_avatar($id, $avatar, $bdd)
     $requete->execute(array('avatar' => $avatar, 'id' => $id));
 }
 
-function inserer_categorie($nom_categorie, $bdd)
-{
-    $sql = 'insert into categories(categorie) values(:categorie)';
-    $request = $bdd->prepare($sql);
-    $request->execute(array('categorie' => $nom_categorie));
-    
-     return $bdd->lastInsertId();
-}
+
 
 function ajout_annonce($titre, $texte, $date,$prix,$id_user,$id_categorie, $photos, $bdd)
 {
@@ -74,7 +67,7 @@ function ajout_annonce($titre, $texte, $date,$prix,$id_user,$id_categorie, $phot
 }
 function maj_annonce($id, $titre, $prix, $description, $date, $categorie, $bdd)
 {
-    $modifie = $bdd->prepare('UPDATE annonces SET titre=:titre, prix=:prix, description=:description, date_debut=:date, idCategorie=:categorie WHERE idAnnonce=:id');
+    $modifie = $bdd->prepare('UPDATE annonces SET titre=:titre, prix=:prix, description=:description, date_debut=:date, idCategorie=:categorie, active=0 WHERE idAnnonce=:id');
     $modifie->execute(array(
         'titre' => $titre,
         'prix' => $prix,
@@ -105,4 +98,48 @@ function maj_active($id, $valeur_active, $bdd)
         'active' => $valeur_active,
         'id' => $id
     ));
+}
+
+function supprimer_categorie($id, $bdd)
+{
+    $sql = "UPDATE annonces set idCategorie=1 where idCategorie=:id";
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+    
+    $sql = "";
+    $requete = "";
+    
+    $sql = "DELETE FROM categories WHERE idCategorie = :id";
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+}
+
+function maj_categorie($id, $nom_categorie, $descritpion, $bdd)
+{
+    $sql = "UPDATE categories set categorie=:nom_categorie, descriptif=:description where idCategorie=:id";
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id, 'nom_categorie' => $nom_categorie, 'description' => $descritpion));
+}
+
+function ajouter_categorie($nom_categorie, $descriptif, $bdd)
+{
+    $sql = 'insert into categories(categorie, descriptif) values(:categorie, :descriptif)';
+    
+    $request = $bdd->prepare($sql);
+    $request->execute(array('categorie' => $nom_categorie, 'descriptif' => $descriptif));
+    
+    return $bdd->lastInsertId();
+}
+
+function supprimer_utilisateur($id, $bdd)
+{
+    $sql = "DELETE FROM utilisateur WHERE idUtilisateur = :id";
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id));
+}
+function maj_admin($id, $valeur, $bdd)
+{
+    $sql = "UPDATE utilisateur set statut=:statut where idUtilisateur=:id";
+    $requete = $bdd->prepare($sql);
+    $requete->execute(array('id' => $id, 'statut' => $valeur));
 }

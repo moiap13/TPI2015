@@ -24,16 +24,9 @@ $pseudo = '';
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_REQUEST['btn_activer']))
+if(isset($_REQUEST['erreur']))
 {
-    maj_active($_REQUEST['id_annonce'], 1, $bdd);
-    
-    echo afficher_erreur(18);
-}
-
-if(isset($_REQUEST['btn_supprimer']))
-{
-    supprimer_annonce($_REQUEST['id_annonce'], $bdd);
+    echo afficher_erreur($_REQUEST['erreur']);
 }
 
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
@@ -56,10 +49,6 @@ else
     exit();
 }
 
-if(isset($_REQUEST['erreur']))
-{
-    echo afficher_erreur($_REQUEST['erreur']);
-}
 
 ?>
 <!--
@@ -101,10 +90,15 @@ and open the template in the editor.
             <div id="contenent">
                 <div id="bienvenue">
                     <span>Bienvennue - <?php echo $_SESSION['PSEUDO']; ?></span>
-                    <p>Gestion des annonces</p>
+                    <p>Gestion des Categories</p>
+                    <div class="droite">
+                        <form action="../categorie/ajouter_categorie.php">
+                            <input type="submit" value="Ajouter une categorie" name="btn_ajouter_categorie" />
+                        </form>
+                    </div>
                 </div>
                 <div id="gestion">
-                    <?php echo afficher_annonces_gestion_annonce(recupere_annonces_non_actives($bdd)); ?>
+                    <?php echo afficher_categories_gestion_categorie(recupere_categories_gestion_categorie($bdd), $bdd); ?>
                 </div>
             </div>
             <div id="pied_page">
