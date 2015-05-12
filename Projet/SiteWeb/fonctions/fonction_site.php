@@ -109,7 +109,7 @@ function couper_espaces($chaine)
  * -----------------------------------------------------------------------------
  * @return la date d'aujourd'hui au format Y-m-d
  */
-function date_ajourdhui()
+function date_ajourdhui($mode = null)
 {
     $date = localtime(time());
 
@@ -117,8 +117,9 @@ function date_ajourdhui()
     $annee = $date[5] + 1900;
 
     $aujourdhui = mktime(0,0,0,$mois,$date[3],$annee,-1);
-    return date('Y-m-d', $aujourdhui);
-}
+    
+    return date('Y-m-d', $aujourdhui);  
+} 
 
 /**
  * calcule le nombre de jours entre aujourd'hui et une date donnée
@@ -469,6 +470,12 @@ function afficher_erreur($erreur)
             break;
         case 21:
             $result = "vous devez être admin";
+            break;
+        case 22:
+            $result = "annonce activée";
+            break;
+        case 23:
+            $result = "annonce désactivée";
             break;
     }
     

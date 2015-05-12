@@ -294,8 +294,9 @@ a:active
 }
 .menu_rapide div
 {
+    text-align: right;
     width: 100%;
-    height: 50%;
+    height: 33%;
     //background-color: red;
 }
 

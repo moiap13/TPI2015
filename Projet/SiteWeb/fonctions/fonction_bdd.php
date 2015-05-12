@@ -99,6 +99,14 @@ function maj_active($id, $valeur_active, $bdd)
         'id' => $id
     ));
 }
+function maj_valide($id, $valeur_valide, $bdd)
+{
+    $modifie = $bdd->prepare('UPDATE annonces SET valide=:valide WHERE idAnnonce=:id');
+    $modifie->execute(array(
+        'valide' => $valeur_valide,
+        'id' => $id
+    ));
+}
 
 function supprimer_categorie($id, $bdd)
 {

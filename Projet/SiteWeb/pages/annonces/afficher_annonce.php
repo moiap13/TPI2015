@@ -25,6 +25,7 @@ $s_url = "connexion.php";
 $lien_menu_annonces = '';
 $lien_gestion_compte = '';
 $pseudo = '';
+$droit = 0;
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
@@ -53,15 +54,9 @@ else
     $annonce = "";
 }
 
-if(!isset($_REQUEST['droit']))
+if(isset($_REQUEST['droit']))
 {
-    $jours = savoir_les_jours_restants($annonce[0][3])[0];
-    $jours = $jours[0] . $jours[1];
-
-    if($jours <= 15 && $annonce[0][6] == 0)
-    {
-        $annonce = "";
-    }
+    $droit = $_REQUEST['droit'];
 }
 
 
@@ -110,7 +105,7 @@ and open the template in the editor.
                 <?php echo afficher_categories(recupere_categories($bdd), 0);  ?>
             </div>
             <div id="contenent">
-                <?php echo afficher_annonce($annonce, $id_annonce, $bdd); ?>
+                <?php echo afficher_annonce($annonce, $id_annonce, $droit, $bdd); ?>
             </div>
             <div id="pied_page">
                 

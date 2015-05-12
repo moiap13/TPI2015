@@ -24,9 +24,9 @@ $pseudo = '';
 
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_REQUEST['btn_activer']))
+if(isset($_REQUEST['btn_valider']))
 {
-    maj_active($_REQUEST['id_annonce'], 1, $bdd);
+    maj_valide($_REQUEST['id_annonce'], 1, $bdd);
     
     echo afficher_erreur(18);
 }
@@ -104,7 +104,7 @@ and open the template in the editor.
                     <p>Gestion des annonces</p>
                 </div>
                 <div id="gestion">
-                    <?php echo afficher_annonces_gestion_annonce(recupere_annonces_non_actives($bdd)); ?>
+                    <?php echo afficher_annonces_gestion_annonce(recupere_annonces_non_valide($bdd)); ?>
                 </div>
             </div>
             <div id="pied_page">

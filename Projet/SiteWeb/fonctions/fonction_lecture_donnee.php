@@ -11,7 +11,7 @@ function recupere_categories($bdd)
 
 function recupere_dernieres_annonces_postee($bdd)
 {
-    $requete = $bdd->query("select idAnnonce, titre, date_debut, photo, prix from annonces where active = 1 order by date_debut desc, idAnnonce desc");
+    $requete = $bdd->query("select idAnnonce, titre, date_debut, photo, prix from annonces where active = 1 && valide = 1 order by date_debut desc, idAnnonce desc");
     if($requete != false)
         $requete = $requete->fetchAll();
     
@@ -35,7 +35,7 @@ function recupere_utilisateur_par_id($id, $bdd)
 
 function recupere_annonces_utilisateur($id, $bdd)
 {
-    $sql = 'select idAnnonce, titre, date_debut, active, photo FROM annonces where idUtilisateur=:id';
+    $sql = 'select idAnnonce, titre, date_debut, active, photo, valide FROM annonces where idUtilisateur=:id';
     
     $requete = $bdd->prepare($sql);
     $requete->execute(array('id' => $id));
@@ -61,7 +61,7 @@ function recupere_annonces_par_categorie($nom_categorie, $bdd)
 
 function recupere_annonces_par_id($id, $bdd)
 {
-    $sql='select titre, description, photo, date_debut, idUtilisateur, prix, active, idCategorie from annonces where idAnnonce =:id';
+    $sql='select titre, description, photo, date_debut, idUtilisateur, prix, active, idCategorie, valide from annonces where idAnnonce =:id';
     
     $requete = $bdd->prepare($sql);
     $requete->execute(array('id' => $id));
@@ -87,9 +87,9 @@ function recupere_categories_par_id($id, $bdd)
 /*******************************************************************************************************************************/
 /********************************************* Page gestion ANNONCES ***********************************************************/
 /*******************************************************************************************************************************/
-function recupere_annonces_non_actives($bdd)
+function recupere_annonces_non_valide($bdd)
 {
-    $sql='select idAnnonce, titre, description, photo, prix from annonces where active =0';
+    $sql='select idAnnonce, titre, description, photo, prix from annonces where valide = 0';
     
     $requete = $bdd->prepare($sql);
     $requete->execute();

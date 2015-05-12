@@ -60,7 +60,10 @@ and open the template in the editor.
         <meta http-equiv="Content-Script-Type" content="text/javascript" />
         <link href="css/style.css" rel="stylesheet" type="text/css" />
         <link href="css/menu_deroulant.css" rel="stylesheet" type="text/css" />
+        <link href="css/recherche_ajax.css" rel="stylesheet" type="text/css" />
+        <script src="javascript/jquery.js"></script>
         <script src="javascript/fonction_globales.js"></script>
+        <script type='text/javascript' src='javascript/ajax.js'></script>
     </head>
     <body>
         <div id="principal">
@@ -88,13 +91,15 @@ and open the template in the editor.
                 <div id='recherche'>
                     <form method="get" action="./pages/recherche.php">
                         <label>Recherche :</label>
-                        <input type="text" name="tbx_search" placeholder="Recherche..." id="tbx_search"/>
+                        <input type="text" autocomplete="off" name='tbx_search' onkeyup='keypressed(event);' id="tbx_search"/>
                         <button type="submit" name='btn_submit' onmousedown="submit();">
                             <div>
                                 <img src="img/image_site/image_search.png" width="40" height="40"/>
                             </div>
                         </button>  
                     </form>
+                    <div id='div_result' class='tumevoispas'>
+                    </div>  
                 </div>
                 <p>Dernières annonces :</p>
                 <div id="derniere_annonces">

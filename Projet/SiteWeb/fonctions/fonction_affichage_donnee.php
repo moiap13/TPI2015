@@ -162,7 +162,7 @@ function afficher_combobox_categories($tableau)
 }
 
 function affichage_annonces_utilisateur($tableau)
-{     
+{
     $affichage = '';
     
     if(!empty($tableau))
@@ -191,8 +191,13 @@ function affichage_annonces_utilisateur($tableau)
 
             $affichage .= '</div>'.
                      '<div class="menu_rapide">' .
-                      '<div><a href="confirmer_suppression.php?id='.$tableau[$i][0].'&droit=proprietaire">x</a></div>' .
-                        '<div><a href="modifier_annonce.php?id_annonce='. $tableau[$i][0] .'">✍</a></div>' .
+                      '<div><a href="confirmer_suppression.php?id='.$tableau[$i][0].'&droit=proprietaire">x</a></div>';
+                    if($tableau[$i][3] == 0)
+                        $affichage .= '<div><a href="activer_desactiver_annonce.php?id='.$tableau[$i][0].'&action=activer">I</a></div>';
+                    else
+                        $affichage .= '<div><a href="activer_desactiver_annonce.php?id='.$tableau[$i][0].'&action=desactiver">O</a></div>';
+                    
+                        $affichage .= '<div><a href="modifier_annonce.php?id_annonce='. $tableau[$i][0] .'">✍</a></div>' .
                       '</div>' .
                         '<div class="titre_user_annonce"><a href="./afficher_annonce.php?id_annonce='. $tableau[$i][0] .'&droit=proprietaire" >'. $tableau[$i][1] .'</a></div>'.
                      
@@ -212,20 +217,18 @@ function affichage_annonces_utilisateur($tableau)
 /*******************************************************************************
 ************* FONCTIONS AFFICHAGE POUR LA PAGE AFFICHER ANNONCES ***************
 *******************************************************************************/
-function afficher_annonce($tableau, $id, $bdd)
+function afficher_annonce($tableau, $id, $droit,$bdd)
 {         
     $affichage = "";
             
     if(!empty($tableau))
     {
-        
-        if(savoir_les_jours_restants($tableau[0][3])[1] == false)
-        {
-            $titre = '<span class="warning_message">Cette annonce n\'est plus disponible...</span>';
-            $description = "";
-            $photos[0] = "";
-        }
+        if($droit == '0')
+            $jours_ok = savoir_les_jours_restants($tableau[0][3])[1];
         else
+            $jours_ok = true;
+        
+        if($jours_ok && $tableau[0][6] == 1 && $tableau[0][8] == 1)
         {
             $titre = $tableau[0][0];
             $description = $tableau[0][1];
@@ -233,6 +236,8 @@ function afficher_annonce($tableau, $id, $bdd)
             $date = $tableau[0][3];
             $prix = $tableau[0][5];
             $categorie = recupere_categories_par_id($tableau[0][7], $bdd)[0][0];
+            
+            $date_tmp = couper_avec_separateur($date . '-', '-');
             
             if($photo == 1)
             {
@@ -242,8 +247,23 @@ function afficher_annonce($tableau, $id, $bdd)
             {
                 $photos[0] = '<img src="../../img/image_site/No_Image_Available.png" alt="no_image" />';
             }
+            
+            $b_date = true;
         }
-
+        else
+        {
+            $titre = '<span class="warning_message">Cette annonce est indisponible...</span>';
+            $description = "";
+            $photos[0] = "";
+            $pseudo_annonceur = 'Indisponible';
+            $mail = "";
+            $date = "Indisponible";
+            $date_tmp = "Indisponible";
+            $prix = '<span class="warning_message">Indisponible</span>';
+            $categorie = '';
+            $b_date = false;
+        }
+        
         $user = recupere_utilisateur_par_id($tableau[0][4], $bdd) ;
         $pseudo_annonceur = $user[0][0];
         $mail = $user[0][1];
@@ -256,8 +276,10 @@ function afficher_annonce($tableau, $id, $bdd)
         $pseudo_annonceur = 'Indisponible';
         $mail = "";
         $date = "Indisponible";
+        $date_tmp = "Indisponible";
         $prix = '<span class="warning_message">Indisponible</span>';
         $categorie = '';
+        $b_date = false;
     }
     
     $affichage .= '<div id="afficher_annonce"><div id="titre_prix"><div id="titre">';
@@ -282,7 +304,12 @@ function afficher_annonce($tableau, $id, $bdd)
     $affichage .= '</span></div><div class="info">';
     $affichage .= '<a href="mailto:' . $mail . '">Contacter l\'anonceur par mail</a>';
     $affichage .= '</div><div class="info">'; 
-    $affichage .= 'annonce parrue le : <span class="red">' . $date . '</span>';
+    
+    if($b_date)
+        $affichage .= 'annonce parrue le : <span class="red">' . $date_tmp[2] . ' / ' . $date_tmp[1] . ' / ' . $date_tmp[0]  . '</span>';
+    else
+        $affichage .= 'annonce parrue le : <span class="red">' . $date_tmp . '</span>';
+    
     $affichage .= '</div></div></div>';
     
     return $affichage;
@@ -395,7 +422,7 @@ function afficher_annonces_gestion_annonce($tableau)
                     '<div class="description_gestion">'. $tableau[$i_index][2] .'</div>' .
                     '<div class="form_gestion">'
                             . '<form action="../annonces/confirmer_suppression.php?id='. $tableau[$i_index][0].'&droit=admin" method="post"><input type="submit" name="btn_supprimer" value="Suprimer" /></form>'
-                            . '<form action="gestion_annonces.php?id_annonce='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_activer" value="Rendre active" /></form>'
+                            . '<form action="gestion_annonces.php?id_annonce='. $tableau[$i_index][0].'" method="post"><input type="submit" name="btn_valider" value="Rendre valide" /></form>'
                     . '</div></div>';
 
 
