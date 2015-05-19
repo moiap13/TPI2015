@@ -22,11 +22,11 @@ function contient_chiffre($chaine)
 {
     $pathern = '#[^0-9]#';
     
-    if(preg_match($pathern,$chaine)) // test la chaine avec le pathern (experssion régulière)
+    if(preg_match($pathern,$chaine) == 1) // test la chaine avec le pathern (experssion régulière)
     {
         return true;
     }
-    else
+    else if(preg_match($pathern,$chaine) == 0)
     {
         return false;
     }
@@ -109,7 +109,7 @@ function couper_espaces($chaine)
  * -----------------------------------------------------------------------------
  * @return la date d'aujourd'hui au format Y-m-d
  */
-function date_ajourdhui($mode = null)
+function date_ajourdhui()
 {
     $date = localtime(time());
 
@@ -363,13 +363,6 @@ function copie_donnee_unique($tableau)
  * @param type $nom_photo : le nom de la photo a supprimer
  * @param type $id_annonce : l'id est utiliser comme nom de dossier
  */
-function supprimer_photo_annonce($nom_photo, $id_annonce)
-{
-    if(file_exists('../../img/annonces/' . $id_annonce . '/' . $nom_photo))
-    {
-        unlink('../../img/annonces/' . $id_annonce . '/' . $nom_photo);
-    }
-}
 
 /**
  * Lis un dossier et retourne le nombres d'élements
@@ -482,6 +475,12 @@ function afficher_erreur($erreur)
     return $affichage = '<script type="text/javascript">alert("' . $result . '");</script>';
 }
 
+/**
+ * crée le menu admin pour un utilisateur admin
+ * 
+ * @param type $chemin : chemin pour retourner a la racine du site
+ * @return string : string avec les liens
+ */
 function creer_menu_admin($chemin)
 {
     $affichage = "";
@@ -498,22 +497,13 @@ function creer_menu_admin($chemin)
     
     return $affichage;
 }
-function verifie_categorie($name, $bdd)
-{
-    $array = recupere_categories($bdd);
-    $return = true;
-    
-    for($i=0;$i<count($array);$i++)
-    {
-        if($array[$i][1] == $name)
-        {
-            $return = false;
-        }
-    }
-    
-    return $return;
-}
 
+/**
+ * convertit un chiffre en string et retourne utilisateur ou admin
+ * 
+ * @param type $statut : le chiffre a convertir
+ * @return string : admin ou utilisateur
+ */
 function convertir_statut($statut)
 {
     if($statut == 0)
@@ -526,4 +516,77 @@ function convertir_statut($statut)
     }
         
         
+}
+
+/**
+ * fonction qui met le texte en gras en fonction d'un mot precis
+ * 
+ * @param type $mot_rechercher : mot a mettre en gras   
+ * @param type $plage : plage de recherche 
+ * @return tableau avec la mise en forme
+ */
+function mettre_text_en_gras($mot_rechercher,$plage)
+{
+    $array_tmp = array();
+    
+    $index = 0;
+    $count_char = 0;
+    $b_fin = false;
+
+    settype($mot_rechercher, "string");
+    
+    $array_tmp[$index] = $plage;
+    
+    if(contient_chiffre($mot_rechercher))
+    { 
+        if(strlen($mot_rechercher) > 1)
+        {
+            while($b_fin == false)
+            {
+                for($y=0;$y<strlen($array_tmp[$index]);$y++)
+                {
+                    if(isset($mot_rechercher[0]) && $mot_rechercher[0] === $array_tmp[$index][$y])
+                    {
+                        for($v=0;$v<strlen($mot_rechercher);$v++)
+                        {
+                            if
+                            (
+                                isset($mot_rechercher[$v]) &&  
+                                isset($array_tmp[$index][$v + $y]) && 
+                                $mot_rechercher[$v] === $array_tmp[$index][$v + $y]
+                            )
+                            {
+                                $count_char++;
+                                
+                                if($count_char === strlen($mot_rechercher))
+                                {
+                                    $b_fin = false;
+                                    $array_tmp[$index + 1] = "";
+
+                                    for($x=0;$x<$y;$x++)
+                                    {
+                                        $array_tmp[$index + 1] .= $array_tmp[$index][$x];
+                                    }
+                                    $array_tmp[$index + 1] .= '<span class="warning_message">' . strtoupper($mot_rechercher) . "</span>";
+
+                                    for($x=$y+strlen($mot_rechercher);$x<strlen($array_tmp[$index]);$x++)
+                                    {
+                                        $array_tmp[$index + 1] .= $array_tmp[$index][$x];
+                                    }
+                                    $index++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $count_char = 0;
+                        $b_fin = true;
+                    }
+                }
+            }
+        }
+    }
+    
+    return $array_tmp[$index];
 }

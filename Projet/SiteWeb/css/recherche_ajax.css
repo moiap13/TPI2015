@@ -1,3 +1,4 @@
+
 .tumevoispas
 {
     visibility: hidden;
@@ -6,10 +7,6 @@
 .tumevois
 {
     visibility: visible;
-    /*font-size : 200%; 
-    background-color: #DAEDFC;
-    width: 300px;
-    height: 40px;*/
 }
 
 li

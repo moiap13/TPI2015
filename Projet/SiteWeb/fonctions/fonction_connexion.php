@@ -1,14 +1,27 @@
 <?php
+/**
+ * fonction qui permet de se logger
+ * -----------------------------------------------------------------------------
+ * @param type $user : pseudo ou mail de l'utilisateur
+ * @param type $mdp : mot de passe de l'utilisateur
+ * @param type $bdd : liaison a la base de donnée
+ * @return type : retourne un tableau avec l'id de l'utilisateur
+ */ 
 function login($user, $mdp, $bdd)
 {
     $sql = 'Select IdUtilisateur from utilisateur where (Email=:user && MDP = :mdp) OR (Pseudo=:user && MDP = :mdp)';
     $requete = $bdd->prepare($sql);
-    $requete->execute(array(':user' => $user, ':mdp' => $mdp));
+    $requete->execute(array(':user' => $user, ':mdp' => sha1($mdp)));
     
     //if($requete != false)
         return $requete->fetchAll();
 }
-
+/**
+ * fonction qui vérifie le formulaire d'inscription
+ * -----------------------------------------------------------------------------
+ * @param type $tableau : tableau avec les données du formulaire
+ * @param type $bdd : liaison a la base de donnée
+ */
 function verifie_formulaire($tableau, $bdd)
 {
     if($tableau['tbxpseudo'] != '')
@@ -67,7 +80,13 @@ function verifie_formulaire($tableau, $bdd)
         header('Location: ../connexion/inscription.php?erreur=6');
     }
 }
-
+/**
+ * inscrit l'utilisateur au site web
+ * -----------------------------------------------------------------------------
+ * @param type $tableau : tableau des données pour l'inscription
+ * @param type $bdd : liaison a l abase de donnée
+ * @return type : retourne l'id de la derniere annonce ajoutée
+ */
 function inscription($tableau, $bdd)
 {
     $result = -1;
@@ -78,7 +97,7 @@ function inscription($tableau, $bdd)
               ':prenom' => $tableau['tbxprenom'],
               ':pseudo' => $tableau['tbxpseudo'],
               ':email' => $tableau['tbxemail'],
-              ':mdp' => $tableau['tbxmdp']
+              ':mdp' => sha1($tableau['tbxmdp'])
             ));
     $result = $bdd->lastInsertId();
     

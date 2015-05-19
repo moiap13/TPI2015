@@ -2,10 +2,10 @@
 session_start();
 
 /****************************************************************
- * Author               : Antonio Pisanello                     * 
+ * Author               : Antonio Pisanello                     *
  * Class                : Ecole d'informatique Genève IN-P4A    *
  * Version              : 1.0                                   *
- * Date of modification : Vendredi, 4 MARS 2014                 *
+ * Date of modification : AVRIL - MAI 2015                      *
  * Modification         :                                       *
  ****************************************************************/
 

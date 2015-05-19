@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+/****************************************************************
+ * Author               : Antonio Pisanello                     *
+ * Class                : Ecole d'informatique Genève IN-P4A    *
+ * Version              : 1.0                                   *
+ * Date of modification : AVRIL - MAI 2015                      *
+ * Modification         :                                       *
+ ****************************************************************/
+
+// j'inclus mes fonctions
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';
 include '../../fonctions/fonction_lecture_donnee.php';
@@ -8,27 +17,30 @@ include '../../fonctions/fonction_affichage_donnee.php';
 include '../../fonctions/fonction_connexion.php';
 include '../../parametres/parametres.php';
 
-
-
+// instentie une connexion a la base
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
+// verifie si l'utilisateur est connecté
 if(!isset($_SESSION['CONN']) && !$_SESSION['CONN'])
 {
     header('Location: ../../index.php?erreur=7');
 }
 
+// recupere l'id
 if(isset($_REQUEST['id']))
 {
     $annonce = recupere_annonces_par_id($_REQUEST['id'], $bdd);
     $titre = $annonce[0][0];
 }
 
+// recupere le droit et verifie si c'est le proprietaire
 if($_REQUEST['droit'] == 'proprietaire')
 {
     if($annonce[0][4] != $_SESSION['ID'])
         header('Location: menu_annonces.php');
 }
-    
+
+// recupere si le bouton non est pressé
 if(isset($_REQUEST['btn_non']))
 {
     if($_REQUEST['droit'] == 'proprietaire')
@@ -37,9 +49,15 @@ if(isset($_REQUEST['btn_non']))
         header ("Location: ../gestion/gestion_annonces.php");
 }
 
+// recupere si le bouton oui est pressé
 if(isset($_REQUEST['btn_oui']))
 {
     supprimer_annonce($_REQUEST['id'], $bdd);
+    
+    if(dossier_existe('../../img/annonces' . $_REQUEST['id'] . '/'))
+    {
+        rmdir('../../img/annonces' . $_REQUEST['id'] . '/');
+    }
     
     if($_REQUEST['droit'] == 'proprietaire')
         header('Location: menu_annonces.php?erreur=15');

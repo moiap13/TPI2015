@@ -2,13 +2,13 @@
 session_start();
 
 /****************************************************************
- * Author               : Antonio Pisanello                     * 
+ * Author               : Antonio Pisanello                     *
  * Class                : Ecole d'informatique Genève IN-P4A    *
  * Version              : 1.0                                   *
- * Date of modification : 25.09.14                              *
+ * Date of modification : AVRIL - MAI 2015                      *
  * Modification         :                                       *
  ****************************************************************/
-
+// inclus mes fonction 
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';
 include '../../fonctions/fonction_lecture_donnee.php';
@@ -16,16 +16,16 @@ include '../../fonctions/fonction_affichage_donnee.php';
 include '../../fonctions/fonction_connexion.php';
 include '../../parametres/parametres.php';
 
+// initialise mes variables
 $s_login = "Login";
 $s_url = "login.php";
 $pseudo = '';
 $today = date_ajourdhui();
 
-
+// liaison a la base de donnée
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-
-
+// regarde si l'utilisateur est connécté
 if(isset($_SESSION["CONN"]) && $_SESSION["CONN"])
 {
     $s_login = "Déconnexion";
@@ -41,18 +41,19 @@ if(isset($_SESSION["CONN"]) && $_SESSION["CONN"])
         $pseudo = creer_menu_admin('../../');
     }
 }
-else
+else // si non le redirrige
 {
     header('Location: ../../index.php?erreur=7');
     exit();
 }
-//$test = select_categories($bdd);
 
+// verifier si le btn poster est pressé
 if(isset($_REQUEST["btn_poster"]))
 {
     if(isset($_REQUEST["tbx_titre_annonce"], $_REQUEST["text_annonce"],  
-            $_REQUEST['date_debut'],$_REQUEST['categorie'] ))
+            $_REQUEST['date_debut'],$_REQUEST['categorie'] )) // verifie que toutes les données sont entrées
     {
+        // initialisation des variables
         $titre = $_REQUEST["tbx_titre_annonce"];
         $text = $_REQUEST["text_annonce"];
         $date = $_REQUEST["date_debut"];
@@ -60,18 +61,7 @@ if(isset($_REQUEST["btn_poster"]))
         $prix = $_REQUEST["tbx_prix"];
         $lastinsertid = -1;
         
-        if($id_categorie == "new" && isset($_REQUEST['tbx_autre']))
-        {
-            if(verifie_categorie($_REQUEST['tbx_autre'], $bdd))
-            {
-               $id_categorie = inserer_categorie($_REQUEST['tbx_autre'], $bdd);
-            }
-            else 
-            {
-                $id_categorie = 1;
-            }
-        }
-        
+        // test pour savoir s'il y a des photos
         if(isset($_FILES['photos']['error'][0]) && $_FILES['photos']['error'][0] != 4)
         {
             $photos = 1;
@@ -81,8 +71,10 @@ if(isset($_REQUEST["btn_poster"]))
             $photos = 0;
         }
         
+        // recupere le dernier ID
         $lastinsertid = ajout_annonce($titre, $text, $date, $prix,$_SESSION['ID'], $id_categorie, $photos, $bdd);
         
+        // deplace les photos dans le dossier
         if($lastinsertid > -1 && $photos == 1)
         {
             $nb = count($_FILES['photos']['name']);
@@ -95,12 +87,13 @@ if(isset($_REQUEST["btn_poster"]))
             }
         }
     }
-    else
+    else // sinon affiche un message
     {
         echo 'Pas tous les champs ont été saisis';
     }
 }
 
+// si une erreure existe on l'affiche
 if(isset($_REQUEST['erreur']))
 {
     echo afficher_erreur($_REQUEST['erreur']);
@@ -220,28 +213,5 @@ and open the template in the editor.
             <div id="pied_page">
             </div>
         </div>
-        <script type="text/javascript">
-            //Insere ton Javascript ;P
-            
-            
-            function test()
-            {
-                var categorie = document.getElementById("cb_categorie");
-                var tbx = document.getElementById("tbx_autre");
-
-                if(categorie.value == "new")
-                {
-                    tbx.type = "text";
-                    tbx.required = true;
-                }
-                else
-                {
-                    tbx.type = "hidden";
-                    tbx.required = false;
-                }
-            }
-            
-            document.onload = test();
-        </script>
     </body>
 </html>

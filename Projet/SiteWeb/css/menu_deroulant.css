@@ -4,7 +4,7 @@
     list-style: none;
 }
 #menu-deroulant {
-/* on centre le menu dans la page */
+/* on centre le test dans les LI*/
     text-align: center;
 }
 #menu-deroulant li {
@@ -15,11 +15,6 @@
 /* on enlève ce comportement pour les liens du sous menu */
     display: inherit;
 }
-/*#menu-deroulant a {
-    text-decoration: none;
-    display: block;
-	color:#000;
-}*/
 #menu-deroulant ul {
     position: absolute;
 /* on cache les sous menus complètement sur la gauche */
@@ -30,12 +25,6 @@
 #menu-deroulant li:hover ul {
 /* Au survol des li du menu on replace les sous menus */
     left: auto;
-    //background-color: #ccc;
     border-top: solid 1px black;
 }
-/*#menu-deroulant li ul li:hover{
-/* Au survol des li du menu on replace les sous menus 
-    left: auto;
-    background-color: #ccc;
-}*/
 

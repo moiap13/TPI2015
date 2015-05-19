@@ -85,10 +85,8 @@ a:active
     height: 680px;
     margin-top: 25px;
     float: left;
-    //background-color: red;
     border : 1px solid black;
     border-radius: 25px 0px 0px 0px;
-    //box-shadow: 15px 15px 20px black;
 }
 .affichage_categorie
 {
@@ -96,7 +94,60 @@ a:active
     height: 50px;
     margin: auto;
     text-align: center;
+    padding-top: 20px;
     border-bottom: solid 1px black;
+    font-size: 16pt;
+}
+.affichage_categorie p
+{
+    width: 50%;
+    display: inline;
+}
+.badge
+{
+    width: 50px;
+    height: 20px;
+    float: right;
+    color: white;
+    border-radius: 35px;
+    background-color: #ccc;
+    font-size: 11pt;
+}
+.badge a:link
+{
+    width: 50px;
+    height: 20px;
+    float: right;
+    color: white;
+    border-radius: 25px;
+    background-color: #ccc;
+}
+.badge a:visited
+{
+    width: 50px;
+    height: 20px;
+    float: right;
+    color: white;
+    border-radius: 25px;
+    background-color: #ccc;
+}
+.badge a:hover
+{
+    width: 50px;
+    height: 20px;
+    float: right;
+    color: white;
+    border-radius: 25px;
+    background-color: #ccc;
+}
+.badge a:active
+{
+    width: 50px;
+    height: 20px;
+    float: right;
+    color: white;
+    border-radius: 25px;
+    background-color: #ccc;
 }
 /*******************************************************************************************************************************/
 /*******************************************************************************************************************************/

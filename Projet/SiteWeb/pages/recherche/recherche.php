@@ -5,53 +5,69 @@ session_start();
  * Author               : Antonio Pisanello                     * 
  * Class                : Ecole d'informatique Genève IN-P4A    *
  * Version              : 1.0                                   *
- * Date of modification : 25.09.14                              *
+ * Date of modification : AVRIL - MAI 2015                      *
  * Modification         :                                       *
  ****************************************************************/
 
-include './functions.php';
 
-$s_login = "Login";
-$s_url = "login.php";
+// j'inclus toutes mes fonctions
+include '../../fonctions/fonction_site.php';
+include '../../fonctions/fonction_bdd.php';
+include '../../fonctions/fonction_lecture_donnee.php';
+include '../../fonctions/fonction_affichage_donnee.php';
+include '../../fonctions/fonction_connexion.php';
+include '../../parametres/parametres.php';
+
+// initialiasion des variables
+$s_login = "Connexion";
+$s_url = "connexion.php";
+$lien_menu_annonces = '';
+$lien_gestion_compte = '';
 $pseudo = '';
 $mot_rechercher = '';
-$today = create_date_today();
+$aujourdhui = date_ajourdhui();
 
-$s_word_search = "";
 
-$bdd = connexion('annonces_en_ligne', 'localhost', 'root', 'root');
+// j'instentie une liaison avec la base
+$bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
-if(isset($_SESSION['conn']) && $_SESSION['conn'])
+// je regarde si l'utilisateur est connecter si oui j'affiche les liens 
+if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
-    $s_login = "unlog";
-    $s_url = "disconnect.php";
-    $pseudo = 'Bienvenue ' . $_SESSION['pseudo'];
+    $s_login = "Déconnexion";
+    $s_url = "deconnexion.php";
+    $pseudo = 'Bienvenue ' . $_SESSION['PSEUDO'];
 
-    $lien_menu_annonces =  '<p><a href="./annonces/menu_annonces.php">Menu annonces</a></p>';
-}
-else
-{
-    $lien_menu_annonces = '<p class="disabled">Menu annonces</p>';
+    $lien_menu_annonces =  '<p><a href="../annonces/menu_annonces.php">Menu annonces</a></p>';
+    $lien_gestion_compte = '<p><a href="../gestion/gestion_compte.php">Gérer son compte</a></p>';
+    
+    if($_SESSION['ADMIN'] == 1)
+    {
+        $pseudo = creer_menu_admin('../../');
+    }
 }
 
+// si on recherche par categorie
 if(isset($_REQUEST['categorie']))
 {
-    $s_word_search = $_REQUEST['categorie'];
+    $mot_rechercher = $_REQUEST['categorie'];
 }
 
+// si on recherche par texte
 if(isset($_REQUEST['tbx_search']))
-{
-    if(there_is_digit($_REQUEST['tbx_search']))
-    {
-        $s_word_search = $_REQUEST['tbx_search'];
-        $array[0] = strtolower($s_word_search);
-        $test = array_merge($array, split_spaces(strtolower($s_word_search) . ' '));
+{   
+    // on verifie si le textBox est vide ou pas et s'il ne contient pas de chiffres
+    if($_REQUEST['tbx_search'] != '' && contient_chiffre($_REQUEST['tbx_search']))
+    {    
+        $mot_rechercher = (string)$_REQUEST['tbx_search'];
+        $array[0] = strtolower($mot_rechercher);
+        $test = array_merge($array, couper_espaces(strtolower($mot_rechercher) . ' '));
     }
-    else
+    else // 
     {
-        $s_word_search = "Vous avez entrer un ou plusieurs chiffres";
-        $test = null;
-    }      
+        $mot_rechercher = "Vous avez entrer un ou plusieurs chiffres";
+        $test = null;   
+    }
 }
 ?>
 <!--
@@ -61,52 +77,64 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html>
     <head>
-        <title>site annonces ligne</title>
+        <title>AnnoLigne</title>
         <meta name="keywords" lang="fr" content="motcle1,mocle2" />
         <meta name="description" content="Description de ma page web." />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="Content-Language" content="fr" />
         <meta http-equiv="Content-Script-Type" content="text/javascript" />
-        <link href="../css/style.css" rel="stylesheet" type="text/css" />
+        <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+        <link href="../../css/menu_deroulant.css" rel="stylesheet" type="text/css" />
+        <link href="../../css/recherche_ajax.css" rel="stylesheet" type="text/css" />
+        <script src="../../javascript/jquery.js"></script>
+        <script src="../../javascript/fonction_globales.js"></script>
+        <script type='text/javascript' src='../../javascript/ajax.js'></script>
     </head>
     <body>
-        <?php
-            // insère ton gros code ici Antonio ;P
-        ?>
         <div id="principal">
             <div id="banniere">
-                <div class="div_banniere"></div>
+                <div class="div_banniere"><p id="display_user"><?php echo $pseudo; ?></p></div>
                 <div class="div_banniere">
-                    <p id="display_user"><?php echo $pseudo; ?></p>
+                    <?php
+                        echo $lien_gestion_compte;
+                    ?>
                 </div>
-                <div class="div_banniere"><p id="titre_site"><a href="../index.php">AnnoLigne<br/>Site d'annonce en ligne</a></p></div>
+                <div class="div_banniere"><p id="titre_site"><a href="../../index.php">AnnoLigne<br/>Site d'annonce en ligne</a></p></div>
                 <div class="div_banniere">
-                    <a href="./connection/<?php echo $s_url; ?>"><?php echo $s_login; ?></a>
+                    <p><a href="../connexion/<?php echo $s_url; ?>"><?php echo $s_login; ?></a></p>
                 </div>
                 <div class="div_banniere">
-                    <?php echo $lien_menu_annonces; ?>
+                    <?php
+                        echo $lien_menu_annonces;
+                    ?>
                 </div>
             </div>
             <div id="categorie">
-                <?php echo display_index_categorie(select_categories($bdd), 2); ?>
+                <?php echo afficher_categories(recupere_categories($bdd), 2, $bdd); ?>
             </div>
             <div id="contenent">
                 <div id='recherche'>
-                    <form method="get" action="#">
+                    <form method="get" action="./recherche.php">
                         <label>Recherche :</label>
-                        <input type="text" name="tbx_search" placeholder="Recherche..." id="tbx_search" value="<?php if(isset($_REQUEST['categorie']))echo "CATEGORIE::". $s_word_search;else if(isset($_REQUEST['tbx_search']))  echo $s_word_search; ?>"/>
-                        <input type="submit" name="btn_search" value="search" id="btn_search"/>   
-                    <form>
+                        <input type="text" autocomplete="off" name='tbx_search' onkeyup='keypressed(event, "recherche");' id="tbx_search" value="<?php if(isset($_REQUEST['categorie']))echo "CATEGORIE::". $mot_rechercher;else if(isset($_REQUEST['tbx_search']))  echo $mot_rechercher; ?>"/>
+                        <button type="submit" name='btn_submit' onmousedown="submit();">
+                            <div>
+                                <img src="../../img/image_site/image_search.png" width="40" height="40"/>
+                            </div>
+                        </button>  
+                    </form>
+                    <div id='div_result' class='tumevoispas'>
+                    </div>  
                 </div>
                 <div id="annonce_recherche">
                     <?php
                         if(isset($_REQUEST['categorie']))
                         {
-                            echo display_annonces_search(select_annonces_from_categorie($s_word_search, $bdd)); 
+                            echo afficher_annonces_recherchee(recupere_annonces_par_categorie($mot_rechercher, $bdd)); 
                         }
                         if(isset($_REQUEST['tbx_search']))
                         {
-                            echo display_annonces_search(search($test, $bdd)); 
+                            echo afficher_Annonces_recherchee(search($test, $bdd)); 
                         }
                     ?>
                 </div>
@@ -115,8 +143,5 @@ and open the template in the editor.
                 
             </div>
         </div>
-        <script type="text/javascript">
-            //Insere ton Javascript ;P
-        </script>
     </body>
 </html>

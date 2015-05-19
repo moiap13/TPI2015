@@ -5,10 +5,11 @@ session_start();
  * Author               : Antonio Pisanello                     * 
  * Class                : Ecole d'informatique Genève IN-P4A    *
  * Version              : 1.0                                   *
- * Date of modification : Vendredi, 4 MARS 2014                 *
+ * Date of modification : AVRIL - MAI 2015                      *
  * Modification         :                                       *
  ****************************************************************/
 
+// j'inclus toutes mes fonctions
 include 'fonctions/fonction_site.php';
 include 'fonctions/fonction_bdd.php';
 include 'fonctions/fonction_lecture_donnee.php';
@@ -16,14 +17,17 @@ include 'fonctions/fonction_affichage_donnee.php';
 include 'fonctions/fonction_connexion.php';
 include 'parametres/parametres.php';
 
+// j'initialise mes variables
 $s_login = "Connexion";
 $s_url = "connexion.php";
 $lien_menu_annonces = '';
 $lien_gestion_compte = '';
 $pseudo = '';
 
+// j'instentie une liaison avec la base
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
-//var_dump_pre($_SESSION);
+
+// je regarde si l'utilisateur est connecter si oui j'affiche les liens 
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
@@ -40,6 +44,7 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
     }
 }
 
+// je regarde si un message d'erreur est la si oui je l'ffiche
 if(isset($_REQUEST['erreur']))
 {
     echo afficher_erreur($_REQUEST['erreur']);
@@ -85,13 +90,13 @@ and open the template in the editor.
                 </div>
             </div>
             <div id="categorie">
-                <?php echo afficher_categories(recupere_categories($bdd), 0); ?>
+                <?php echo afficher_categories(recupere_categories($bdd), 0, $bdd); ?>
             </div>
             <div id="contenent">
                 <div id='recherche'>
-                    <form method="get" action="./pages/recherche.php">
+                    <form method="get" action="./pages/recherche/recherche.php">
                         <label>Recherche :</label>
-                        <input type="text" autocomplete="off" name='tbx_search' onkeyup='keypressed(event);' id="tbx_search"/>
+                        <input type="text" autocomplete="off" name='tbx_search' onkeyup='keypressed(event, "index");' id="tbx_search"/>
                         <button type="submit" name='btn_submit' onmousedown="submit();">
                             <div>
                                 <img src="img/image_site/image_search.png" width="40" height="40"/>

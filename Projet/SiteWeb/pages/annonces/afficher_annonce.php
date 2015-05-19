@@ -2,17 +2,14 @@
 session_start();
 
 /****************************************************************
- * Author               : Antonio Pisanello                     * 
+ * Author               : Antonio Pisanello                     *
  * Class                : Ecole d'informatique Genève IN-P4A    *
  * Version              : 1.0                                   *
- * Date of modification : 25.09.14                              *
+ * Date of modification : AVRIL - MAI 2015                      *
  * Modification         :                                       *
  ****************************************************************/
 
-/*echo '<pre>';
-var_dump($_SESSION);
-echo '</pre>';*/
-
+// j'inclus mes fonctions
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';
 include '../../fonctions/fonction_lecture_donnee.php';
@@ -20,6 +17,7 @@ include '../../fonctions/fonction_affichage_donnee.php';
 include '../../fonctions/fonction_connexion.php';
 include '../../parametres/parametres.php';
 
+// initialisation des variables
 $s_login = "Connexion";
 $s_url = "connexion.php";
 $lien_menu_annonces = '';
@@ -27,8 +25,10 @@ $lien_gestion_compte = '';
 $pseudo = '';
 $droit = 0;
 
+// instentie la liaison bdd
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
+// verifie si l'utilisateur est connecté
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
@@ -44,17 +44,18 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
     }
 }
 
+// récupere l'id de l'annonce
 if(isset($_REQUEST['id_annonce']))
 {
     $id_annonce = $_REQUEST['id_annonce'];
-    $annonce = recupere_annonces_par_id($_REQUEST['id_annonce'], $bdd);
+    $annonce = recupere_annonces_par_id($_REQUEST['id_annonce'], $bdd); // recupere l'annonce et la stocke
 }
 else 
 {
-    $annonce = "";
+    $annonce = ""; // si non l'annonce vaut rien
 }
 
-if(isset($_REQUEST['droit']))
+if(isset($_REQUEST['droit'])) // regarde s'il y a des droits
 {
     $droit = $_REQUEST['droit'];
 }
@@ -102,7 +103,7 @@ and open the template in the editor.
                 </div>
             </div>
             <div id="categorie">
-                <?php echo afficher_categories(recupere_categories($bdd), 0);  ?>
+                <?php echo afficher_categories(recupere_categories($bdd), 1, $bdd); ?>
             </div>
             <div id="contenent">
                 <?php echo afficher_annonce($annonce, $id_annonce, $droit, $bdd); ?>
@@ -111,8 +112,5 @@ and open the template in the editor.
                 
             </div>
         </div>
-        <script type="text/javascript">
-            //Insere ton Javascript ;P
-        </script>
     </body>
 </html>

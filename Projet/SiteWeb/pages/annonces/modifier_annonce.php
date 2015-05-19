@@ -1,14 +1,15 @@
 <?php
 session_start();
 
-/*****************************************************************
- * Author               : Antonio Pisanello                      * 
- * Class                : Ecole d'informatique Genève IN-P4A     *
- * Version              : 1.0                                    *
- * Date of modification : 25.09.14                               *
- * Modification         :                                        *
+/****************************************************************
+ * Author               : Antonio Pisanello                     *
+ * Class                : Ecole d'informatique Genève IN-P4A    *
+ * Version              : 1.0                                   *
+ * Date of modification : AVRIL - MAI 2015                      *
+ * Modification         :                                       *
  ****************************************************************/
 
+// inclus les fonctions
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';
 include '../../fonctions/fonction_lecture_donnee.php';
@@ -16,14 +17,17 @@ include '../../fonctions/fonction_affichage_donnee.php';
 include '../../fonctions/fonction_connexion.php';
 include '../../parametres/parametres.php';
 
+// initialise les variables
 $s_login = "Login";
 $s_url = "login.php";
 $pseudo = '';
 $input_delete = '<input type="submit" name="btn_delete_ads" value="Supprimer Annonce"/>';
 $input_modifier = '<input type="submit" name="btn_modifier" value="Modifier Annonce"/>';
 
+// liaison a la base de donnée
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
+// verifie si l'utilisateur est connécter
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
@@ -38,20 +42,23 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
         $pseudo = creer_menu_admin('../../');
     }
 }
-else
+else // si non on le redirrige
 {
     header('Location: ../../index.php?erreur=7');
 }
 
+// regarde s'il faut supprimer une photo
 if(isset($_REQUEST['photo_supprimer']))
 {
-    supprimer_photo($_REQUEST['photo_supprimer'], $_REQUEST['id_annonce']);
+    supprimer_photo($_REQUEST['photo_supprimer'], $_REQUEST['id_annonce']); // supprime la photo
 }
 
+// deplace les photos dans un dossier
 if(isset($_FILES['photos']['error'][0]) && $_FILES['photos']['error'][0] != 4)
 {
     $nb = count($_FILES['photos']['name']);
     
+    // si le dossier existe on rajoute les photos
     if(dossier_existe('../../img/annonces/' . $_REQUEST['id_annonce'] . '/'))
     {
         for($z=0;$z<$nb ;$z++)
@@ -59,7 +66,7 @@ if(isset($_FILES['photos']['error'][0]) && $_FILES['photos']['error'][0] != 4)
             move_uploaded_file($_FILES['photos']['tmp_name'][$z], '../../img/annonces/'. $_REQUEST['id_annonce'] . '/' . ($z + savoir_nombre_photo_max($_REQUEST['id_annonce'])) . changer_formats($_FILES['photos']['type'][$z]));
         }
     }
-    else
+    else // si non on crée le dossier
     {
         mkdir('../../img/annonces/' . $_REQUEST['id_annonce']);
         
@@ -73,6 +80,7 @@ if(isset($_FILES['photos']['error'][0]) && $_FILES['photos']['error'][0] != 4)
     
 }
 
+// verifie si le btn modifier est pressé
 if(isset($_REQUEST["btn_modifier"]))
 {
     $id_categorie = $_REQUEST['hidden_combobox'];
@@ -92,19 +100,22 @@ if(isset($_REQUEST["btn_modifier"]))
     header('Location: menu_annonces.php?erreur=14');
 }
 
+// on recupere l'id de l'annonce
 if(isset($_REQUEST['id_annonce']))
 {
-    $annonce = recupere_annonces_par_id($_REQUEST['id_annonce'], $bdd);
+    $annonce = recupere_annonces_par_id($_REQUEST['id_annonce'], $bdd); // recupere l'annonce
     
+    // verifie si l'annonce existe
     if(!empty($annonce))
     {
+        // initialise les variables
         $date = $annonce[0][3];
         $titre = $annonce[0][0];
         $prix = $annonce[0][5];
         $description = $annonce[0][1];
         $photo = $annonce[0][2];
 
-        if($photo == 1)
+        if($photo == 1) // verifie s'il y a des photos
         {
             $photos = afficher_photo_annonce($_REQUEST['id_annonce']);
         }
@@ -115,7 +126,7 @@ if(isset($_REQUEST['id_annonce']))
     }
 
         $user = recupere_utilisateur_par_id($annonce[0][4], $bdd) ;
-        $pseudo_annonceur = $user[0][0];
+        $pseudo_annonceur = $user[0][1];
         $mail = $user[0][1];
 }
 else
@@ -171,7 +182,7 @@ and open the template in the editor.
                 </div>
             </div>
             <div id="categorie">
-                <?php echo afficher_categories(recupere_categories($bdd), 0);  ?>
+                <?php echo afficher_categories(recupere_categories($bdd), 1, $bdd); ?>
             </div>
             <div id="contenent">
                 

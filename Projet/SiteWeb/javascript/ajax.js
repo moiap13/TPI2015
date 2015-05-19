@@ -21,7 +21,7 @@ function str_array(str, delimiter)
     console.log(a);
 }
 
-function ajax(query)
+function ajax(query, page)
 {
     var xhr=null;
     console.log(query);
@@ -33,15 +33,19 @@ function ajax(query)
         xhr = new ActiveXObject("Microsoft.XMLHTTP");
     }
     //on définit l'appel de la fonction au retour serveur
-    xhr.onreadystatechange = function() { alert_ajax(xhr); };
+    xhr.onreadystatechange = function() { alert_ajax(xhr, page); };
  
     document.getElementById("div_result").className="tumevois";
     //on appelle le fichier reponse.txt
-    xhr.open("GET", "./pages/recherche/recherche_ajax/get_personnes.php?query=" + query, true);
+    if(page == 'index')
+        xhr.open("GET", "./pages/recherche/recherche_ajax/annonces_ajax.php?query=" + query, true);
+    else if(page == 'recherche')
+        xhr.open("GET", "./recherche_ajax/annonces_ajax.php?query=" + query, true);
+    
     xhr.send(null);
 }
 
-function alert_ajax(xhr)
+function alert_ajax(xhr, page)
 {
     var a = new Array();
     var b = new Array();
@@ -60,26 +64,50 @@ function alert_ajax(xhr)
             }
             
             affichage = '';
-            console.log(b);
             
-            for(var i=0;i<b.length;i++)
+            if(page == 'index')
             {
-                affichage += '<div class="ajax_annonce"><div class="ajax_photo"><a href="pages/annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">';
-                
-                if(b[i][3] == 1)
+                for(var i=0;i<b.length;i++)
                 {
-                    affichage += '<img src="img/annonces/' + b[i][0] + '/' +b[i][5] +'" />';
+                    affichage += '<div class="ajax_annonce"><div class="ajax_photo"><a href="pages/annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">';
+
+                    if(b[i][3] == 1)
+                    {
+                        affichage += '<img src="img/annonces/' + b[i][0] + '/' +b[i][5] +'" />';
+                    }
+                    else
+                    {
+                        affichage += '<img src="img/image_site/No_Image_Available.png" />';
+                    }
+
+                    affichage += '</a></div><div class="ajax_titre_prix">';
+                    affichage += '<a href="pages/annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">' + b[i][1] + ' - ' + b[i][2] + '</a>';
+                    affichage += '</div><div class="ajax_date">';
+                    affichage += '<a href="pages/annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">' + b[i][4] + '</a>';
+                    affichage += '</div></div>';
                 }
-                else
+            }
+            else if(page == 'recherche')
+            {
+                for(var i=0;i<b.length;i++)
                 {
-                    affichage += '<img src="img/image_site/No_Image_Available.png" />';
+                    affichage += '<div class="ajax_annonce"><div class="ajax_photo"><a href="../annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">';
+
+                    if(b[i][3] == 1)
+                    {
+                        affichage += '<img src="../../img/annonces/' + b[i][0] + '/' +b[i][5] +'" />';
+                    }
+                    else
+                    {
+                        affichage += '<img src="../../img/image_site/No_Image_Available.png" />';
+                    }
+
+                    affichage += '</a></div><div class="ajax_titre_prix">';
+                    affichage += '<a href="../annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">' + b[i][1] + ' - ' + b[i][2] + '</a>';
+                    affichage += '</div><div class="ajax_date">';
+                    affichage += '<a href="../annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">' + b[i][4] + '</a>';
+                    affichage += '</div></div>';
                 }
-                
-                affichage += '</a></div><div class="ajax_titre_prix">';
-                affichage += '<a href="pages/annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">' + b[i][1] + ' - ' + b[i][2] + '</a>';
-                affichage += '</div><div class="ajax_date">';
-                affichage += '<a href="pages/annonces/afficher_annonce.php?id_annonce=' + b[i][0] + '">' + b[i][4] + '</a>';
-                affichage += '</div></div>'
             }
 
             document.getElementById("div_result").innerHTML = affichage;
@@ -124,11 +152,11 @@ function change_width(event)
     }
 }
 
-function keypressed(event)
+function keypressed(event, page)
 {
     if(event.target.value != "")
     {
-        ajax('select idAnnonce,titre,prix,photo,date_debut from annonces where (titre RegExp "' + event.target.value + '" OR description RegExp "' + event.target.value + '" OR prix RegExp "' + event.target.value + '") AND (active = 1) order by date_debut desc, idAnnonce desc');
+        ajax('select idAnnonce,titre,prix,photo,date_debut from annonces where (titre RegExp "' + event.target.value + '" OR prix RegExp "' + event.target.value + '") AND (active = 1 AND valide=1) order by date_debut desc, idAnnonce desc', page);
     }
     else
     {

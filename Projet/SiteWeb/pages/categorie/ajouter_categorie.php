@@ -1,14 +1,13 @@
 <?php
 session_start();
-
 /****************************************************************
- * Author               : Antonio Pisanello                     * 
+ * Author               : Antonio Pisanello                     *
  * Class                : Ecole d'informatique Genève IN-P4A    *
  * Version              : 1.0                                   *
- * Date of modification : Vendredi, 4 MARS 2014                 *
+ * Date of modification : AVRIL - MAI 2015                      *
  * Modification         :                                       *
  ****************************************************************/
-
+// j'inclus toutes mes fonctions
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';
 include '../../fonctions/fonction_lecture_donnee.php';
@@ -16,14 +15,17 @@ include '../../fonctions/fonction_affichage_donnee.php';
 include '../../fonctions/fonction_connexion.php';
 include '../../parametres/parametres.php';
 
+// j'initialise mes variables
 $s_login = "Connexion";
 $s_url = "connexion.php";
 $lien_menu_annonces = '';
 $lien_gestion_compte = '';
 $pseudo = '';
 
+// j'instentie une liaison avec la base
 $bdd = connexion($BASE_DE_DONNEE, $SERVEUR, $UTILISATEUR_BDD, $MDP_UTILISATEUR_BDD);
 
+// je regarde si l'utilisateur est connecter si oui j'affiche les liens 
 if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
 {
     $s_login = "Déconnexion";
@@ -38,12 +40,13 @@ if(isset($_SESSION['CONN']) && $_SESSION['CONN'])
         $pseudo = creer_menu_admin('../../');
     }
 }
-else
+else // si l'utilisateur n'est pas connecter on le redirige sur l'index
 {
     header('Location: ../../index.php?erreur=7');
     exit();
 }
 
+// si on recoit une valeur du btn ajouter
 if(isset($_REQUEST['btn_ajouter']))
 {
     ajouter_categorie($_REQUEST['tbxtitre'], $_REQUEST['tbxdescription'], $bdd);

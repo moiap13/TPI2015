@@ -3,6 +3,15 @@ session_start();
 session_destroy();
 session_start();
 
+
+/****************************************************************
+ * Author               : Antonio Pisanello                     *
+ * Class                : Ecole d'informatique Genève IN-P4A    *
+ * Version              : 1.0                                   *
+ * Date of modification : AVRIL - MAI 2015                      *
+ * Modification         :                                       *
+ ****************************************************************/
+
 include '../../fonctions/fonction_site.php';
 include '../../fonctions/fonction_bdd.php';
 include '../../fonctions/fonction_lecture_donnee.php';

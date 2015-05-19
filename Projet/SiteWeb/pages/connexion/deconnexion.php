@@ -1,13 +1,16 @@
 <?php
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 session_start();
 session_destroy();
 session_start();
+
+
+/****************************************************************
+ * Author               : Antonio Pisanello                     *
+ * Class                : Ecole d'informatique Genève IN-P4A    *
+ * Version              : 1.0                                   *
+ * Date of modification : AVRIL - MAI 2015                      *
+ * Modification         :                                       *
+ ****************************************************************/
 
 $_SESSION["conn"] = false;
 
